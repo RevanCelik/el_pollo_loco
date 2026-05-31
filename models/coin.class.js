@@ -1,0 +1,39 @@
+class Coin extends MovableObject {
+    width = 150;
+    height = 150;
+    img = new Image();
+    IMAGES_COIN = [
+        'img/8_coin/coin_1.png',
+        'img/8_coin/coin_2.png'
+    ];
+    imageCache = [];
+    currentImage = 0;
+    constructor(x, y) {
+        super();
+        this.loadImage('img/8_coin/coin_1.png');
+        this.x = x;
+        this.y = y;
+        this.loadImages(this.IMAGES_COIN);
+        this.animate();
+    }
+
+    loadImage(path) {
+        this.img.src = path;
+
+    }
+
+    loadImages(arr) {
+        arr.forEach((path) => {
+            let img = new Image();
+            img.src = path;
+            this.imageCache[path] = img;
+        });
+    }
+
+        animate() {
+
+        setInterval(() => {
+            this.playAnimation(this.IMAGES_COIN);
+        }, 1000 / 5);
+    }
+}
