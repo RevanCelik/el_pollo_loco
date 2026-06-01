@@ -5,6 +5,8 @@ class Character extends MovableObject {
     speed = 10;
     coins = 0;
     bottles = 0;
+    deadAnimationPlayed = false;
+    deadImageIndex = 0;
 
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
@@ -77,7 +79,9 @@ class Character extends MovableObject {
 
         setInterval(() => {
             if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD);
+                if (!this.deadAnimationPlayed) {
+                    this.playDeadAnimation();
+                }
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isAboveGround()) {
@@ -89,7 +93,19 @@ class Character extends MovableObject {
 
                 }
             }
-        }, 50);
+        }, 100);
+    }
+
+    playDeadAnimation() {
+        if (this.deadImageIndex < this.IMAGES_DEAD.length) {
+            let path = this.IMAGES_DEAD[this.deadImageIndex];
+            this.img = this.imageCache[path];
+            this.deadImageIndex++;
+        }
+
+        if (this.deadImageIndex >= this.IMAGES_DEAD.length) {
+            this.deadAnimationPlayed = true;
+        }
     }
 
     collectCoin() {
@@ -99,4 +115,6 @@ class Character extends MovableObject {
     collectBottle() {
         this.bottles += 20;
     }
+
+
 }
