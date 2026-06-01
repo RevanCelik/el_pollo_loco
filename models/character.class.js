@@ -4,6 +4,7 @@ class Character extends MovableObject {
     y = 50;
     speed = 10;
     coins = 0;
+    bottles = 0;
 
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
@@ -93,5 +94,9 @@ class Character extends MovableObject {
 
     collectCoin() {
         this.coins += 20;
+    }
+
+    collectBottle() {
+        this.bottles += 20;
     }
 }
