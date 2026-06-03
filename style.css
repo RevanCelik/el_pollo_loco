@@ -1,3 +1,11 @@
+@font-face {
+    font-family: 'Rye';
+    src: url('./fonts/rye-regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -6,9 +14,17 @@ body {
     min-height: 100vh;
     background-image: url('img/desert2.png');
     background-size: cover;
+    font-family: 'Rye', cursive;
+}
+
+h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 
 canvas {
     background-color: black;
 }
+
