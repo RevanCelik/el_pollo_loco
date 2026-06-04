@@ -26,6 +26,10 @@ class World {
 
     run() {
         setInterval(() => {
+            if (this.character.isDead()) {
+                return;
+            }
+
             this.checkCollisions();
             this.checkThrowObjects();
             this.checkThrowableObjectCollisions();
@@ -156,9 +160,21 @@ class World {
 
         this.ctx.translate(-this.camera_x, 0);
 
-
+        if (this.character.isDead() && this.character.deadAnimationPlayed) {
+            this.drawGameOverScreen();
+        }
         requestAnimationFrame(() => this.draw());
     }
+
+    drawGameOverScreen() {
+    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    this.ctx.font = '60px rye';
+    this.ctx.fillStyle = 'white';
+    this.ctx.textAlign = 'center';
+    this.ctx.fillText('GAME OVER', this.canvas.width / 2, this.canvas.height / 2);
+}
 
     addObjectToMap(objects) {
         objects.forEach(o => {
