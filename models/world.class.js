@@ -28,6 +28,7 @@ class World {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
+            this.checkThrowableObjectCollisions();
             this.checkCoinsCollisions();
             this.checkBottleCollisions();
 
@@ -101,9 +102,13 @@ class World {
     checkThrowableObjectCollisions() {
         this.throwableObjects.forEach((throwableObject, index) => {
             this.level.enemies.forEach((enemy, enemyIndex) => {
-                if (throwableObject.isColliding(enemy)) {
+                if (enemy instanceof Endboss && throwableObject.isColliding(enemy)) {
                     this.throwableObjects.splice(index, 1);
-                    this.level.enemies.splice(enemyIndex, 1);
+                    enemy.hitByBottle();
+
+                    if (enemy.isDead()) {
+                        this.level.enemies.splice(enemyIndex, 1);
+                    }
                 }
             });
         });

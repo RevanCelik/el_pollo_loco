@@ -3,6 +3,7 @@ class Endboss extends MovableObject {
     height = 500;
     width = 400;
     y = -20;
+    energy = 60;
 
     IMAGES_WALKING = [
         'img/4_enemie_boss_chicken/2_alert/G5.png',
@@ -18,15 +19,24 @@ class Endboss extends MovableObject {
 
     constructor() {
         super().loadImage(this.IMAGES_WALKING[0]);
-        this.loadImages(this.IMAGES_WALKING);   
+        this.loadImages(this.IMAGES_WALKING);
         this.x = 2200;
         this.animate();
     }
 
-    animate() {     
+    animate() {
 
         setInterval(() => {
             this.playAnimation(this.IMAGES_WALKING);
-        }, 200); 
+        }, 200);
     }
+
+    hitByBottle() {
+        this.energy -= 20;
+
+        if (this.energy < 0) {
+            this.energy = 0;
+        }
+    }
+
 }
