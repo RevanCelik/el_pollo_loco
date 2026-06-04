@@ -9,6 +9,7 @@ class World {
     coinBar = new StatusbarCoin();
     bottleBar = new StatusbarBottle();
     throwableObjects = [];
+    canThrow = true;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -30,25 +31,51 @@ class World {
             this.checkCoinsCollisions();
             this.checkBottleCollisions();
 
-        }, 200);
+        }, 1000 / 60);
     }
 
     checkThrowObjects() {
-        if (this.keyboard.D && this.character.bottles > 0) {
+        if (this.keyboard.D && this.character.bottles > 0 && this.canThrow) {
             let throwableObject = new ThrowableObject(this.character.x + 100, this.character.y + 100);
             this.throwableObjects.push(throwableObject);
+
             this.character.bottles -= 20;
             this.bottleBar.setPercentage(this.character.bottles);
+
+            this.canThrow = false;
+        }
+
+        if (!this.keyboard.D) {
+            this.canThrow = true;
         }
     }
 
     checkCollisions() {
-        this.level.enemies.forEach((enemy) => {
+        this.level.enemies.forEach((enemy, index) => {
             if (this.character.isColliding(enemy)) {
-                this.character.hit();
-                this.statusBar.setPercentage(this.character.energy);
+                this.handleEnemyCollision(enemy, index);
             }
         });
+    }
+
+    handleEnemyCollision(enemy, index) {
+        if (enemy instanceof Chicken && this.isTopCollision(enemy)) {
+            this.level.enemies.splice(index, 1);
+            this.character.jump();
+        } else {
+            this.character.hit();
+            this.statusBar.setPercentage(this.character.energy);
+        }
+    }
+
+    isTopCollision(enemy) {
+        let characterFeet = this.character.y + this.character.height;
+        let enemyTop = enemy.y;
+        let difference = characterFeet - enemyTop;
+
+        return this.character.speedY < 0 &&
+            difference > 0 &&
+            difference < 60;
     }
 
     checkCoinsCollisions() {
@@ -71,6 +98,16 @@ class World {
         });
     }
 
+    checkThrowableObjectCollisions() {
+        this.throwableObjects.forEach((throwableObject, index) => {
+            this.level.enemies.forEach((enemy, enemyIndex) => {
+                if (throwableObject.isColliding(enemy)) {
+                    this.throwableObjects.splice(index, 1);
+                    this.level.enemies.splice(enemyIndex, 1);
+                }
+            });
+        });
+    }
 
 
     draw() {
