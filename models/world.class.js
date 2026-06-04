@@ -63,8 +63,10 @@ class World {
         if (enemy instanceof Chicken && this.isTopCollision(enemy)) {
             this.level.enemies.splice(index, 1);
             this.character.jump();
-        } else {
-            this.character.hit();
+            return;
+        }
+
+        if (this.character.hit()) {
             this.statusBar.setPercentage(this.character.energy);
         }
     }
@@ -74,9 +76,15 @@ class World {
         let enemyTop = enemy.y;
         let difference = characterFeet - enemyTop;
 
+        let characterCenterX = this.character.x + this.character.width / 2;
+        let enemyLeft = enemy.x;
+        let enemyRight = enemy.x + enemy.width;
+
         return this.character.speedY < 0 &&
             difference > 0 &&
-            difference < 60;
+            difference < 30 &&
+            characterCenterX > enemyLeft &&
+            characterCenterX < enemyRight;
     }
 
     checkCoinsCollisions() {
@@ -100,18 +108,29 @@ class World {
     }
 
     checkThrowableObjectCollisions() {
-        this.throwableObjects.forEach((throwableObject, index) => {
+        this.throwableObjects.forEach((throwableObject, bottleIndex) => {
             this.level.enemies.forEach((enemy, enemyIndex) => {
-                if (enemy instanceof Endboss && throwableObject.isColliding(enemy)) {
-                    this.throwableObjects.splice(index, 1);
-                    enemy.hitByBottle();
-
-                    if (enemy.isDead()) {
-                        this.level.enemies.splice(enemyIndex, 1);
-                    }
+                if (throwableObject.isColliding(enemy)) {
+                    this.handleThrowableObjectCollision(enemy, enemyIndex, bottleIndex);
                 }
             });
         });
+    }
+
+    handleThrowableObjectCollision(enemy, enemyIndex, bottleIndex) {
+        this.throwableObjects.splice(bottleIndex, 1);
+
+        if (enemy instanceof Chicken) {
+            this.level.enemies.splice(enemyIndex, 1);
+        }
+
+        if (enemy instanceof Endboss) {
+            enemy.hitByBottle();
+
+            if (enemy.isDead()) {
+                this.level.enemies.splice(enemyIndex, 1);
+            }
+        }
     }
 
 

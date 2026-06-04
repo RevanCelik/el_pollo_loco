@@ -27,17 +27,29 @@ class MovableObject extends DrawableObject {
     isColliding(mo) {
         return this.x + this.width > mo.x &&
             this.y + this.height > mo.y &&
-            this.x < mo.x &&
+            this.x < mo.x + mo.width &&
             this.y < mo.y + mo.height;
     }
 
     hit() {
-        this.energy -= 5;
-        if (this.energy < 0) {
-            this.energy = 0;
-        } else {
+        if (this.canBeHit()) {
+            this.energy -= 20;
+
+            if (this.energy < 0) {
+                this.energy = 0;
+            }
+
             this.lastHit = new Date().getTime();
+            return true;
         }
+
+        return false;
+    }
+
+    canBeHit() {
+        let timePassed = new Date().getTime() - this.lastHit;
+        timePassed = timePassed / 1000;
+        return timePassed > 1;
     }
 
     isHurt() {
