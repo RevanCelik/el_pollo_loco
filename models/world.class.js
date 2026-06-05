@@ -22,6 +22,10 @@ class World {
 
     setWorld() {
         this.character.world = this;
+
+        this.level.enemies.forEach(enemy => {
+            enemy.world = this;
+        });
     }
 
     run() {
@@ -35,6 +39,7 @@ class World {
             this.checkThrowableObjectCollisions();
             this.checkCoinsCollisions();
             this.checkBottleCollisions();
+            this.removeDeadEndbosses();
 
         }, 1000 / 60);
     }
@@ -130,11 +135,15 @@ class World {
 
         if (enemy instanceof Endboss) {
             enemy.hitByBottle();
-
-            if (enemy.isDead()) {
-                this.level.enemies.splice(enemyIndex, 1);
-            }
         }
+    }
+
+    removeDeadEndbosses() {
+        this.level.enemies.forEach((enemy, index) => {
+            if (enemy instanceof Endboss && enemy.isDeadAnimationPlayed) {
+                this.level.enemies.splice(index, 1);
+            }
+        });
     }
 
 
@@ -167,14 +176,14 @@ class World {
     }
 
     drawGameOverScreen() {
-    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.ctx.font = '60px rye';
-    this.ctx.fillStyle = 'white';
-    this.ctx.textAlign = 'center';
-    this.ctx.fillText('GAME OVER', this.canvas.width / 2, this.canvas.height / 2);
-}
+        this.ctx.font = '60px rye';
+        this.ctx.fillStyle = 'white';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText('GAME OVER', this.canvas.width / 2, this.canvas.height / 2);
+    }
 
     addObjectToMap(objects) {
         objects.forEach(o => {
