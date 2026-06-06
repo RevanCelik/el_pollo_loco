@@ -23,10 +23,59 @@ h1 {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+.game-title.hidden {
+    visibility: hidden;
+}
+
+.game-container {
+    position: relative;
+    width: 720px;
+    height: 480px;
+}
+
 
 canvas {
     background-color: black;
     display: block;
+}
+
+.start-screen {
+    position: absolute;
+    width: 720px;
+    height: 480px;
+    background-image: url('img/startscreen_loco.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    z-index: 10;
+}
+
+.start-screen h1 {
+    font-family: rye;
+    font-size: 64px;
+    color: white;
+    margin: 0;
+}
+
+.start-screen button {
+    font-family: rye;
+    font-size: 32px;
+    padding: 12px 32px;
+    cursor: pointer;
+    background-color: #56b30f;
+    border: none;
+    border-radius: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.start-screen button:hover {
+    background-color: #4a9c0c;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
 }
 
 
@@ -47,4 +96,3 @@ canvas {
         display: none;
     }
 }
-

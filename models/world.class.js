@@ -10,11 +10,16 @@ class World {
     bottleBar = new StatusbarBottle();
     throwableObjects = [];
     canThrow = true;
+    gameOverImage = new Image();
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+
+
+        this.gameOverImage.src = 'img/gameover_loco.png';
+
         this.draw();
         this.setWorld();
         this.run();
@@ -176,13 +181,49 @@ class World {
     }
 
     drawGameOverScreen() {
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        let dimensions = this.getCoverDimensions(this.gameOverImage);
+        this.ctx.drawImage(
+            this.gameOverImage,
+            dimensions.x,
+            dimensions.y,
+            dimensions.width,
+            dimensions.height
+        );
+    }
 
-        this.ctx.font = '60px rye';
-        this.ctx.fillStyle = 'white';
-        this.ctx.textAlign = 'center';
-        this.ctx.fillText('GAME OVER', this.canvas.width / 2, this.canvas.height / 2);
+    getCoverDimensions(image) {
+        let imageRatio = image.width / image.height;
+        let canvasRatio = this.canvas.width / this.canvas.height;
+
+        if (imageRatio > canvasRatio) {
+            return this.getWideCoverDimensions(imageRatio);
+        } else {
+            return this.getTallCoverDimensions(imageRatio);
+        }
+    }
+
+    getWideCoverDimensions(imageRatio) {
+        let height = this.canvas.height;
+        let width = height * imageRatio;
+
+        return {
+            x: (this.canvas.width - width) / 2,
+            y: 0,
+            width: width,
+            height: height
+        };
+    }
+
+    getTallCoverDimensions(imageRatio) {
+        let width = this.canvas.width;
+        let height = width / imageRatio;
+
+        return {
+            x: 0,
+            y: (this.canvas.height - height) / 2,
+            width: width,
+            height: height
+        };
     }
 
     addObjectToMap(objects) {
