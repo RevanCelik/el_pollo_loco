@@ -78,6 +78,40 @@ canvas {
     transform: scale(1.05);
 }
 
+.game-over-overlay {
+    position: absolute;
+    width: 720px;
+    height: 480px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 60px;
+    box-sizing: border-box;
+    z-index: 20;
+}
+
+.game-over-overlay.hidden {
+    display: none;
+}
+
+.game-over-overlay button {
+    font-family: 'Rye', cursive;
+    font-size: 32px;
+    padding: 12px 32px;
+    cursor: pointer;
+    background-color: #b3260f;
+    border: none;
+    border-radius: 16px;
+    color: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.game-over-overlay button:hover {
+    background-color: #8f1e0c;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+}
+
 
 /*--Smartphone responsiveness--*/
 

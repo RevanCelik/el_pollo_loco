@@ -27,6 +27,10 @@ function init() {
     console.log('My Character:', world.character);
 }
 
+function restartGame() {
+    location.reload();
+}
+
 window.addEventListener("keydown", (e) => {
     if (e.code === "ArrowRight") {
         keyboard.RIGHT = true;

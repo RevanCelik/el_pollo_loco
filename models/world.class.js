@@ -11,6 +11,7 @@ class World {
     throwableObjects = [];
     canThrow = true;
     gameOverImage = new Image();
+    gameOverShown = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -183,7 +184,9 @@ class World {
 
         if (this.character.isDead() && this.character.deadAnimationPlayed) {
             this.drawGameOverScreen();
+            this.handleGameOver();
         }
+
         requestAnimationFrame(() => this.draw());
     }
 
@@ -196,6 +199,20 @@ class World {
             dimensions.width,
             dimensions.height
         );
+    }
+
+    handleGameOver() {
+        if (this.gameOverShown) {
+            return;
+        }
+
+        this.gameOverShown = true;
+        this.showGameOverOverlay();
+    }
+    
+    showGameOverOverlay() {
+        document.getElementById('gameOverOverlay').classList.remove('hidden');
+        document.getElementById('gameTitle').classList.add('hidden');
     }
 
     getCoverDimensions(image) {
