@@ -22,6 +22,7 @@ class World {
 
         this.draw();
         this.setWorld();
+        this.startEnemies();
         this.run();
     }
 
@@ -30,6 +31,12 @@ class World {
 
         this.level.enemies.forEach(enemy => {
             enemy.world = this;
+        });
+    }
+
+    startEnemies() {
+        this.level.enemies.forEach(enemy => {
+            enemy.startAnimation();
         });
     }
 
