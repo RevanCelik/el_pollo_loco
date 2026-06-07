@@ -33,18 +33,27 @@
 
     <h1 id="gameTitle" class="game-title hidden">El Pollo Loco</h1>
 
-    <div class="game-container">
-        <div id="startScreen" class="start-screen">
-            <button onclick="startGame()">Start Game</button>
-        </div>
+    <div id="fullscreen">
+        <button id="fullscreenButton" class="fullscreen-button" aria-label="Fullscreen">
+            ⛶
+        </button>
+        <div class="game-container">
+            <div id="startScreen" class="start-screen">
+                <button onclick="startGame()">Start Game</button>
+            </div>
 
-        <div id="gameOverOverlay" class="game-over-overlay hidden">
-            <button onclick="restartGame()">Restart Game</button>
-        </div>
+            <div id="gameOverOverlay" class="game-over-overlay hidden">
+                <button onclick="restartGame()">Restart Game</button>
+            </div>
 
-        <canvas id="canvas" width="720" height="480"></canvas>
+            <div id="winnerOverlay" class="winner-overlay hidden">
+                <button onclick="restartGame()">Restart Game</button>
+            </div>
+
+            <canvas id="canvas" width="720" height="480"></canvas>
+        </div>
     </div>
-
 </body>
+<script src="js/script.js"></script>
 
 </html>

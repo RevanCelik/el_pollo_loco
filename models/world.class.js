@@ -10,16 +10,13 @@ class World {
     bottleBar = new StatusbarBottle();
     throwableObjects = [];
     canThrow = true;
-    gameOverImage = new Image();
     gameOverShown = false;
+    winnerShown = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-
-
-        this.gameOverImage.src = 'img/gameover_loco.png';
 
         this.draw();
         this.setWorld();
@@ -43,7 +40,7 @@ class World {
 
     run() {
         setInterval(() => {
-            if (this.character.isDead()) {
+            if (this.character.isDead() || this.winnerShown) {
                 return;
             }
 
@@ -154,9 +151,24 @@ class World {
     removeDeadEndbosses() {
         this.level.enemies.forEach((enemy, index) => {
             if (enemy instanceof Endboss && enemy.isDeadAnimationPlayed) {
+                this.handleWinnerScreen();
                 this.level.enemies.splice(index, 1);
             }
         });
+    }
+
+    handleWinnerScreen() {
+        if (this.winnerShown) {
+            return;
+        }
+
+        this.winnerShown = true;
+        this.showWinnerOverlay();
+    }
+
+    showWinnerOverlay() {
+        document.getElementById('winnerOverlay').classList.remove('hidden');
+        document.getElementById('gameTitle').classList.add('hidden');
     }
 
 
@@ -183,22 +195,10 @@ class World {
         this.ctx.translate(-this.camera_x, 0);
 
         if (this.character.isDead() && this.character.deadAnimationPlayed) {
-            this.drawGameOverScreen();
             this.handleGameOver();
         }
 
         requestAnimationFrame(() => this.draw());
-    }
-
-    drawGameOverScreen() {
-        let dimensions = this.getCoverDimensions(this.gameOverImage);
-        this.ctx.drawImage(
-            this.gameOverImage,
-            dimensions.x,
-            dimensions.y,
-            dimensions.width,
-            dimensions.height
-        );
     }
 
     handleGameOver() {
@@ -209,45 +209,10 @@ class World {
         this.gameOverShown = true;
         this.showGameOverOverlay();
     }
-    
+
     showGameOverOverlay() {
         document.getElementById('gameOverOverlay').classList.remove('hidden');
         document.getElementById('gameTitle').classList.add('hidden');
-    }
-
-    getCoverDimensions(image) {
-        let imageRatio = image.width / image.height;
-        let canvasRatio = this.canvas.width / this.canvas.height;
-
-        if (imageRatio > canvasRatio) {
-            return this.getWideCoverDimensions(imageRatio);
-        } else {
-            return this.getTallCoverDimensions(imageRatio);
-        }
-    }
-
-    getWideCoverDimensions(imageRatio) {
-        let height = this.canvas.height;
-        let width = height * imageRatio;
-
-        return {
-            x: (this.canvas.width - width) / 2,
-            y: 0,
-            width: width,
-            height: height
-        };
-    }
-
-    getTallCoverDimensions(imageRatio) {
-        let width = this.canvas.width;
-        let height = width / imageRatio;
-
-        return {
-            x: 0,
-            y: (this.canvas.height - height) / 2,
-            width: width,
-            height: height
-        };
     }
 
     addObjectToMap(objects) {

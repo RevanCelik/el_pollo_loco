@@ -13,7 +13,7 @@ function startGame() {
 }
 
 function hideStartScreen() {
-    document.getElementById('startScreen').style.display = 'none';
+    document.getElementById('startScreen').classList.add('hidden');
 }
 
 function showGameTitle() {
