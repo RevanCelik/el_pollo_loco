@@ -12,6 +12,13 @@ class World {
     canThrow = true;
     gameOverShown = false;
     winnerShown = false;
+    gameOverStarted = false;
+
+    characterHurtSound = new Audio('audio/character_hurt.wav');
+    characterDeadSound = new Audio('audio/character_dead.wav');
+
+    isCharacterHurtSoundPlaying = false;
+    isCharacterDeadSoundPlaying = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -85,8 +92,15 @@ class World {
             return;
         }
 
-        if (this.character.hit()) {
+        if (this.character.isColliding(enemy)) {
+            this.character.hit();
             this.statusBar.setPercentage(this.character.energy);
+
+            if (this.character.isDead()) {
+                this.startGameOverSequence();
+            } else {
+                this.playCharacterHurtSound();
+            }
         }
     }
 
@@ -171,6 +185,39 @@ class World {
         document.getElementById('gameTitle').classList.add('hidden');
     }
 
+    playCharacterHurtSound() {
+        if (
+            !this.isCharacterHurtSoundPlaying &&
+            !this.isCharacterDeadSoundPlaying &&
+            !this.character.isDead()
+        ) {
+            this.isCharacterHurtSoundPlaying = true;
+            this.characterHurtSound.play();
+
+            this.characterHurtSound.onended = () => {
+                this.isCharacterHurtSoundPlaying = false;
+            };
+        }
+    }
+
+    playCharacterDeadSound() {
+        if (!this.isCharacterDeadSoundPlaying) {
+            this.isCharacterDeadSoundPlaying = true;
+            this.characterDeadSound.play();
+        }
+    }
+
+    startGameOverSequence() {
+        if (this.gameOverStarted) return;
+
+        this.gameOverStarted = true;
+        this.playCharacterDeadSound();
+
+        setTimeout(() => {
+            this.handleGameOver();
+        }, 2500);
+    }
+
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -194,8 +241,8 @@ class World {
 
         this.ctx.translate(-this.camera_x, 0);
 
-        if (this.character.isDead() && this.character.deadAnimationPlayed) {
-            this.handleGameOver();
+        if (this.character.isDead()) {
+            this.startGameOverSequence();
         }
 
         requestAnimationFrame(() => this.draw());
