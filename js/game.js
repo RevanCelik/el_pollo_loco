@@ -82,3 +82,63 @@ window.addEventListener("keyup", (e) => {
         keyboard.D = false;
     }
 });
+
+document.getElementById('btnLeft').addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    keyboard.LEFT = true;
+});
+
+document.getElementById('btnLeft').addEventListener('touchend', (e) => {
+    e.preventDefault();
+    keyboard.LEFT = false;
+});
+
+document.getElementById('btnRight').addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    keyboard.RIGHT = true;
+});
+
+document.getElementById('btnRight').addEventListener('touchend', (e) => {
+    e.preventDefault();
+    keyboard.RIGHT = false;
+});
+
+document.getElementById('btnUp').addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    keyboard.UP = true;
+});
+
+document.getElementById('btnUp').addEventListener('touchend', (e) => {
+    e.preventDefault();
+    keyboard.UP = false;
+});
+
+document.getElementById('btnDown').addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    keyboard.DOWN = true;
+});
+
+document.getElementById('btnDown').addEventListener('touchend', (e) => {
+    e.preventDefault();
+    keyboard.DOWN = false;
+});
+
+document.getElementById('btnSpace').addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    keyboard.SPACE = true;
+});
+
+document.getElementById('btnSpace').addEventListener('touchend', (e) => {
+    e.preventDefault();
+    keyboard.SPACE = false;
+});
+
+document.getElementById('btnD').addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    keyboard.D = true;
+});
+
+document.getElementById('btnD').addEventListener('touchend', (e) => {
+    e.preventDefault();
+    keyboard.D = false;
+});
