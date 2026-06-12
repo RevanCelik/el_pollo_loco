@@ -183,6 +183,7 @@ class World {
     showWinnerOverlay() {
         document.getElementById('winnerOverlay').classList.remove('hidden');
         document.getElementById('gameTitle').classList.add('hidden');
+        hideMobileControls();
     }
 
     playCharacterHurtSound() {
@@ -260,6 +261,7 @@ class World {
     showGameOverOverlay() {
         document.getElementById('gameOverOverlay').classList.remove('hidden');
         document.getElementById('gameTitle').classList.add('hidden');
+        hideMobileControls();
     }
 
     addObjectToMap(objects) {

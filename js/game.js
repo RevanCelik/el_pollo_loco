@@ -9,7 +9,16 @@ function initStartScreen() {
 function startGame() {
     hideStartScreen();
     showGameTitle();
+    showMobileControls();
     init();
+}
+
+function showMobileControls() {
+    document.getElementById('mobileControls').classList.remove('hidden');
+}
+
+function hideMobileControls() {
+    document.getElementById('mobileControls').classList.add('hidden');
 }
 
 function hideStartScreen() {
@@ -101,26 +110,6 @@ document.getElementById('btnRight').addEventListener('touchstart', (e) => {
 document.getElementById('btnRight').addEventListener('touchend', (e) => {
     e.preventDefault();
     keyboard.RIGHT = false;
-});
-
-document.getElementById('btnUp').addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    keyboard.UP = true;
-});
-
-document.getElementById('btnUp').addEventListener('touchend', (e) => {
-    e.preventDefault();
-    keyboard.UP = false;
-});
-
-document.getElementById('btnDown').addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    keyboard.DOWN = true;
-});
-
-document.getElementById('btnDown').addEventListener('touchend', (e) => {
-    e.preventDefault();
-    keyboard.DOWN = false;
 });
 
 document.getElementById('btnSpace').addEventListener('touchstart', (e) => {
