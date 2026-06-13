@@ -57,7 +57,7 @@ class World {
             this.checkCoinsCollisions();
             this.checkBottleCollisions();
             this.removeDeadEndbosses();
-
+            this.removeSplashedBottles();
         }, 1000 / 60);
     }
 
@@ -105,17 +105,19 @@ class World {
     }
 
     isTopCollision(enemy) {
-        let characterFeet = this.character.y + this.character.height;
-        let enemyTop = enemy.y;
+        let characterFeet = this.character.y + this.character.height - this.character.offset.bottom;
+        let enemyTop = enemy.y + enemy.offset.top;
         let difference = characterFeet - enemyTop;
 
-        let characterCenterX = this.character.x + this.character.width / 2;
-        let enemyLeft = enemy.x;
-        let enemyRight = enemy.x + enemy.width;
+        let characterCenterX = this.character.x + this.character.offset.left +
+            (this.character.width - this.character.offset.left - this.character.offset.right) / 2;
+
+        let enemyLeft = enemy.x + enemy.offset.left;
+        let enemyRight = enemy.x + enemy.width - enemy.offset.right;
 
         return this.character.speedY < 0 &&
             difference > 0 &&
-            difference < 30 &&
+            difference < 60 &&
             characterCenterX > enemyLeft &&
             characterCenterX < enemyRight;
     }
@@ -151,7 +153,14 @@ class World {
     }
 
     handleThrowableObjectCollision(enemy, enemyIndex, bottleIndex) {
-        this.throwableObjects.splice(bottleIndex, 1);
+        let bottle = this.throwableObjects[bottleIndex];
+
+        if (bottle.hasHit) {
+            return;
+        }
+
+        bottle.hasHit = true;
+        bottle.splash();
 
         if (enemy instanceof Chicken) {
             this.level.enemies.splice(enemyIndex, 1);
@@ -160,6 +169,10 @@ class World {
         if (enemy instanceof Endboss) {
             enemy.hitByBottle();
         }
+    }
+
+    removeSplashedBottles() {
+        this.throwableObjects = this.throwableObjects.filter(bottle => !bottle.shouldRemove);
     }
 
     removeDeadEndbosses() {

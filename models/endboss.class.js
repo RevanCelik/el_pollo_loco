@@ -5,6 +5,13 @@ class Endboss extends MovableObject {
     y = -20;
     energy = 60;
 
+    offset = {
+        top: 120,
+        left: 60,
+        right: 60,
+        bottom: 40
+    };
+
     IMAGES_ALERT = [
         'img/4_enemie_boss_chicken/2_alert/G5.png',
         'img/4_enemie_boss_chicken/2_alert/G6.png',

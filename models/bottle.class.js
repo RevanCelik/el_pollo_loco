@@ -2,19 +2,42 @@ class Bottle extends MovableObject {
     width = 100;
     height = 100;
     img = new Image();
+
     IMAGES_BOTTLE = [
         'img/6_salsa_bottle/1_salsa_bottle_on_ground.png',
         'img/6_salsa_bottle/2_salsa_bottle_on_ground.png'
     ];
+
+    IMAGES_THROWING = [
+        'img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png',
+        'img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png',
+        'img/6_salsa_bottle/bottle_rotation/3_bottle_rotation.png',
+        'img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.png'
+    ];
+
+    IMAGES_SPLASH = [
+        'img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
+        'img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png',
+        'img/6_salsa_bottle/bottle_rotation/bottle_splash/3_bottle_splash.png',
+        'img/6_salsa_bottle/bottle_rotation/bottle_splash/4_bottle_splash.png',
+        'img/6_salsa_bottle/bottle_rotation/bottle_splash/5_bottle_splash.png',
+        'img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png'
+    ];
+
     imageCache = [];
     currentImage = 0;
-    constructor(x, y) {
+
+    constructor(x, y, shouldAnimate = true) {
         super();
         this.loadImage('img/6_salsa_bottle/1_salsa_bottle_on_ground.png');
         this.x = x;
         this.y = y;
         this.loadImages(this.IMAGES_BOTTLE);
-        this.animate();
+        this.loadImages(this.IMAGES_THROWING);
+        this.loadImages(this.IMAGES_SPLASH);
+        if (shouldAnimate) {
+            this.animate();
+        }
     }
 
     loadImage(path) {
@@ -30,7 +53,7 @@ class Bottle extends MovableObject {
         });
     }
 
-        animate() {
+    animate() {
 
         setInterval(() => {
             this.playAnimation(this.IMAGES_BOTTLE);

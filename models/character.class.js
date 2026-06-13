@@ -8,6 +8,13 @@ class Character extends MovableObject {
     deadAnimationPlayed = false;
     deadImageIndex = 0;
 
+    offset = {
+        top: 120,
+        left: 35,
+        right: 35,
+        bottom: 10
+    };
+
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
