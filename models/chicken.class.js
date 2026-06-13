@@ -8,19 +8,17 @@ class Chicken extends MovableObject {
         'img/3_enemies_chicken/chicken_normal/1_walk/3_w.png'
     ];
 
-    constructor() {
+    constructor(x) {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
 
-        this.x = 300 + Math.random() * 1500; // Random x position between 300 and 1800
+        this.x = x;
         this.speed = 0.15 + Math.random() * 0.25;
-
-
     }
 
     startAnimation() {
-    this.animate();
-}
+        this.animate();
+    }
 
     animate() {
         setInterval(() => {

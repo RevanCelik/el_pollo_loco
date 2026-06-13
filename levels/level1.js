@@ -34,9 +34,20 @@ function createRandomBottles() {
     return bottles;
 }
 
+function createRandomChickens() {
+    let chickens = [];
+    let xPositions = shuffleArray([500, 800, 1100, 1400, 1700, 2000]);
+
+    for (let i = 0; i < 5; i++) {
+        chickens.push(new Chicken(xPositions[i]));
+    }
+
+    return chickens;
+}
+
 const level1 = new Level(
 
-    [new Chicken(), new Chicken(), new Chicken(), new Endboss()],
+    [...createRandomChickens(), new Endboss()],
     [new Cloud()],
     [
         new BackgroundObject('img/5_background/layers/air.png', -719),
@@ -61,7 +72,7 @@ const level1 = new Level(
         new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 719 * 3),
         new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 719 * 3),
         new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 719 * 3),
-    ],  
+    ],
     createRandomCoins(),
     createRandomBottles()
 
