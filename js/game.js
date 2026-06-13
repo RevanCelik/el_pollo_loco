@@ -4,6 +4,7 @@ let keyboard = new Keyboard();
 
 function initStartScreen() {
     canvas = document.getElementById('canvas');
+    bindTouchControls();
 }
 
 function startGame() {
@@ -92,42 +93,27 @@ window.addEventListener("keyup", (e) => {
     }
 });
 
-document.getElementById('btnLeft').addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    keyboard.LEFT = true;
-});
+function bindTouchButton(buttonId, key) {
+    let button = document.getElementById(buttonId);
 
-document.getElementById('btnLeft').addEventListener('touchend', (e) => {
-    e.preventDefault();
-    keyboard.LEFT = false;
-});
+    if (!button) {
+        return;
+    }
 
-document.getElementById('btnRight').addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    keyboard.RIGHT = true;
-});
+    button.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard[key] = true;
+    });
 
-document.getElementById('btnRight').addEventListener('touchend', (e) => {
-    e.preventDefault();
-    keyboard.RIGHT = false;
-});
+    button.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard[key] = false;
+    });
+}
 
-document.getElementById('btnSpace').addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    keyboard.SPACE = true;
-});
-
-document.getElementById('btnSpace').addEventListener('touchend', (e) => {
-    e.preventDefault();
-    keyboard.SPACE = false;
-});
-
-document.getElementById('btnD').addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    keyboard.D = true;
-});
-
-document.getElementById('btnD').addEventListener('touchend', (e) => {
-    e.preventDefault();
-    keyboard.D = false;
-});
+function bindTouchControls() {
+    bindTouchButton('btnLeft', 'LEFT');
+    bindTouchButton('btnRight', 'RIGHT');
+    bindTouchButton('btnSpace', 'SPACE');
+    bindTouchButton('btnD', 'D');
+}
