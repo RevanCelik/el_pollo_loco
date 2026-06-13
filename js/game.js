@@ -1,17 +1,30 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let audioManager = new AudioManager();
 
 function initStartScreen() {
     canvas = document.getElementById('canvas');
     bindTouchControls();
+    document.addEventListener('click', playStartScreenMusicOnce);
+}
+
+function playStartScreenMusicOnce() {
+    audioManager.playStartScreenMusic();
+    document.removeEventListener('click', playStartScreenMusicOnce);
 }
 
 function startGame() {
+    audioManager.playStartButtonSound();
+
     hideStartScreen();
     showGameTitle();
     showMobileControls();
     init();
+
+    setTimeout(() => {
+        audioManager.playGameMusic();
+    }, 250);
 }
 
 function showMobileControls() {
@@ -38,7 +51,12 @@ function init() {
 }
 
 function restartGame() {
-    location.reload();
+    audioManager.playStartButtonSound();
+
+    setTimeout(() => {
+        audioManager.stopAllMusic();
+        location.reload();
+    }, 250);
 }
 
 window.addEventListener("keydown", (e) => {

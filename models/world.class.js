@@ -14,12 +14,6 @@ class World {
     winnerShown = false;
     gameOverStarted = false;
 
-    characterHurtSound = new Audio('audio/character_hurt.wav');
-    characterDeadSound = new Audio('audio/character_dead.wav');
-
-    isCharacterHurtSoundPlaying = false;
-    isCharacterDeadSoundPlaying = false;
-
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -54,6 +48,7 @@ class World {
             this.checkCollisions();
             this.checkThrowObjects();
             this.checkThrowableObjectCollisions();
+            this.checkBottleGroundCollision();
             this.checkCoinsCollisions();
             this.checkBottleCollisions();
             this.removeDeadEndbosses();
@@ -65,6 +60,7 @@ class World {
         if (this.keyboard.D && this.character.bottles > 0 && this.canThrow) {
             let throwableObject = new ThrowableObject(this.character.x + 100, this.character.y + 100);
             this.throwableObjects.push(throwableObject);
+            audioManager.playBottleThrowSound();
 
             this.character.bottles -= 20;
             this.bottleBar.setPercentage(this.character.bottles);
@@ -87,6 +83,7 @@ class World {
 
     handleEnemyCollision(enemy, index) {
         if (enemy instanceof Chicken && this.isTopCollision(enemy)) {
+            audioManager.playChickenDeadSound();
             this.level.enemies.splice(index, 1);
             this.character.jump();
             return;
@@ -99,7 +96,7 @@ class World {
             if (this.character.isDead()) {
                 this.startGameOverSequence();
             } else {
-                this.playCharacterHurtSound();
+                audioManager.playCharacterHurtSound(this.character.isDead());
             }
         }
     }
@@ -125,6 +122,7 @@ class World {
     checkCoinsCollisions() {
         this.level.coins.forEach((coin, index) => {
             if (this.character.isColliding(coin)) {
+                audioManager.playCoinSound();
                 this.level.coins.splice(index, 1);
                 this.character.collectCoin();
                 this.coinBar.setPercentage(this.character.coins);
@@ -135,6 +133,7 @@ class World {
     checkBottleCollisions() {
         this.level.bottles.forEach((bottle, index) => {
             if (this.character.isColliding(bottle)) {
+                audioManager.playBottlePickupSound();
                 this.level.bottles.splice(index, 1);
                 this.character.collectBottle();
                 this.bottleBar.setPercentage(this.character.bottles);
@@ -161,8 +160,10 @@ class World {
 
         bottle.hasHit = true;
         bottle.splash();
+        audioManager.playBottleBreakSound();
 
         if (enemy instanceof Chicken) {
+            audioManager.playChickenDeadSound();
             this.level.enemies.splice(enemyIndex, 1);
         }
 
@@ -184,12 +185,23 @@ class World {
         });
     }
 
+    checkBottleGroundCollision() {
+        this.throwableObjects.forEach(bottle => {
+            if (!bottle.hasHit && bottle.y > 360) {
+                bottle.hasHit = true;
+                bottle.splash();
+                audioManager.playBottleBreakSound();
+            }
+        });
+    }
+
     handleWinnerScreen() {
         if (this.winnerShown) {
             return;
         }
 
         this.winnerShown = true;
+        audioManager.playWinnerSoundThenScreenMusic();
         this.showWinnerOverlay();
     }
 
@@ -199,33 +211,12 @@ class World {
         hideMobileControls();
     }
 
-    playCharacterHurtSound() {
-        if (
-            !this.isCharacterHurtSoundPlaying &&
-            !this.isCharacterDeadSoundPlaying &&
-            !this.character.isDead()
-        ) {
-            this.isCharacterHurtSoundPlaying = true;
-            this.characterHurtSound.play();
-
-            this.characterHurtSound.onended = () => {
-                this.isCharacterHurtSoundPlaying = false;
-            };
-        }
-    }
-
-    playCharacterDeadSound() {
-        if (!this.isCharacterDeadSoundPlaying) {
-            this.isCharacterDeadSoundPlaying = true;
-            this.characterDeadSound.play();
-        }
-    }
-
     startGameOverSequence() {
         if (this.gameOverStarted) return;
 
         this.gameOverStarted = true;
-        this.playCharacterDeadSound();
+        audioManager.stopGameMusic();
+        audioManager.playGameOverSound();
 
         setTimeout(() => {
             this.handleGameOver();
@@ -268,6 +259,7 @@ class World {
         }
 
         this.gameOverShown = true;
+        audioManager.playGameOverScreenMusic();
         this.showGameOverOverlay();
     }
 

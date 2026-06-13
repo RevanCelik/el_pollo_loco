@@ -8,6 +8,8 @@ class Character extends MovableObject {
     deadAnimationPlayed = false;
     deadImageIndex = 0;
 
+    jumpSound = new Audio('audio/character_jump.wav');
+
     offset = {
         top: 120,
         left: 35,
@@ -82,6 +84,7 @@ class Character extends MovableObject {
             }
 
             if ((this.world.keyboard.UP || this.world.keyboard.SPACE) && !this.isAboveGround()) {
+                this.playJumpSound();
                 this.jump();
             }
 
@@ -105,6 +108,11 @@ class Character extends MovableObject {
                 }
             }
         }, 100);
+    }
+
+    playJumpSound() {
+        this.jumpSound.currentTime = 0;
+        this.jumpSound.play();
     }
 
     playDeadAnimation() {
