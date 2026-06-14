@@ -51,6 +51,7 @@ class World {
             this.checkBottleGroundCollision();
             this.checkCoinsCollisions();
             this.checkBottleCollisions();
+            this.checkFootstepLoop();
             this.removeDeadEndbosses();
             this.removeSplashedBottles();
         }, 1000 / 60);
@@ -195,12 +196,31 @@ class World {
         });
     }
 
+    checkFootstepLoop() {
+        if (this.shouldPlayFootstepLoop()) {
+            audioManager.playFootstepLoop();
+        } else {
+            audioManager.stopFootstepLoop();
+        }
+    }
+
+    shouldPlayFootstepLoop() {
+        return (
+            (this.keyboard.RIGHT || this.keyboard.LEFT) &&
+            !this.character.isAboveGround() &&
+            !this.character.isDead() &&
+            !this.winnerShown &&
+            !this.gameOverShown
+        );
+    }
+
     handleWinnerScreen() {
         if (this.winnerShown) {
             return;
         }
 
         this.winnerShown = true;
+        audioManager.stopFootstepLoop();
         audioManager.playWinnerSoundThenScreenMusic();
         this.showWinnerOverlay();
     }
@@ -215,6 +235,7 @@ class World {
         if (this.gameOverStarted) return;
 
         this.gameOverStarted = true;
+        audioManager.stopFootstepLoop();
         audioManager.stopGameMusic();
         audioManager.playGameOverSound();
 

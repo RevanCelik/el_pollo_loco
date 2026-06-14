@@ -18,6 +18,8 @@ class AudioManager {
     gameOverScreenMusic = new Audio('audio/game_over_screen_music.wav');
     winnerScreenMusic = new Audio('audio/winner_screen_music.wav');
 
+    footstepLoop = new Audio('audio/footstep_sand_loop.wav');
+
     isCharacterHurtSoundPlaying = false;
     isGameOverSoundPlaying = false;
 
@@ -32,6 +34,9 @@ class AudioManager {
         this.gameOverSound.volume = 0.6;
         this.characterHurtSound.volume = 0.55;
         this.chickenDeadSound.volume = 0.55;
+
+        this.footstepLoop.loop = true;
+        this.footstepLoop.volume = 0.16;
 
         this.bottleThrowSound.volume = 0.55;
         this.bottleBreakSound.volume = 0.55;
@@ -127,6 +132,20 @@ class AudioManager {
         this.bottlePickupSound.play();
     }
 
+    playFootstepLoop() {
+        if (!this.footstepLoop.paused) {
+            return;
+        }
+
+        this.footstepLoop.currentTime = 0;
+        this.footstepLoop.play();
+    }
+
+    stopFootstepLoop() {
+        this.footstepLoop.pause();
+        this.footstepLoop.currentTime = 0;
+    }
+
     playWinnerSound() {
         this.stopGameMusic();
         this.winnerSound.currentTime = 0;
@@ -177,5 +196,6 @@ class AudioManager {
         this.stopGameMusic();
         this.stopGameOverScreenMusic();
         this.stopWinnerScreenMusic();
+        this.stopFootstepLoop();
     }
 }
