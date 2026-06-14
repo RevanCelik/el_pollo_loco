@@ -9,3 +9,17 @@ toggleButton.addEventListener('click', () => {
     }
 });
 
+function toggleMusic() {
+    audioManager.toggleMusic();
+
+    let button = document.getElementById('musicButton');
+    button.innerText = audioManager.musicMuted ? 'Music: OFF' : 'Music: ON';
+}
+
+function toggleSfx() {
+    audioManager.toggleSfx();
+
+    let button = document.getElementById('sfxButton');
+    button.innerText = audioManager.sfxMuted ? 'SFX: OFF' : 'SFX: ON';
+}
+

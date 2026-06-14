@@ -38,9 +38,13 @@
     <h1 id="gameTitle" class="game-title hidden">El Pollo Loco</h1>
 
     <div id="fullscreen">
-        <button id="fullscreenButton" class="fullscreen-button" aria-label="Fullscreen">
-            ⛶
-        </button>
+        <div class="sound-controls">
+            <button id="musicButton" onclick="toggleMusic()">Music: ON</button>
+            <button id="sfxButton" onclick="toggleSfx()">SFX: ON</button>
+            <button id="fullscreenButton" class="fullscreen-button" aria-label="Fullscreen">
+                ⛶
+            </button>
+        </div>
         <div class="game-container">
             <div id="startScreen" class="start-screen">
                 <button onclick="startGame()" class="menu-button">Start Game</button>

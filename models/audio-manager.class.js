@@ -7,6 +7,8 @@ class AudioManager {
     characterHurtSound = new Audio('audio/character_hurt.wav');
     chickenDeadSound = new Audio('audio/chicken_dead.wav');
 
+    characterJumpSound = new Audio('audio/character_jump.wav');
+
     bottleThrowSound = new Audio('audio/bottle_throw.wav');
     bottleBreakSound = new Audio('audio/bottle_break.wav');
 
@@ -26,6 +28,12 @@ class AudioManager {
     isCharacterHurtSoundPlaying = false;
     isGameOverSoundPlaying = false;
 
+    musicMuted = false;
+    sfxMuted = false;
+    musicVolume = 0.4;
+    sfxVolume = 0.8;
+    currentMusic = null;
+
     constructor() {
         this.startScreenMusic.loop = true;
         this.startScreenMusic.volume = 0.15;
@@ -37,6 +45,8 @@ class AudioManager {
         this.gameOverSound.volume = 0.6;
         this.characterHurtSound.volume = 0.55;
         this.chickenDeadSound.volume = 0.55;
+
+        this.characterJumpSound.volume = 0.55;
 
         this.footstepLoop.loop = true;
         this.footstepLoop.volume = 0.16;
@@ -60,7 +70,7 @@ class AudioManager {
 
     playStartScreenMusic() {
         this.stopGameMusic();
-        this.startScreenMusic.play();
+        this.playMusic(this.startScreenMusic);
     }
 
     stopStartScreenMusic() {
@@ -71,7 +81,7 @@ class AudioManager {
     playGameMusic() {
         this.stopStartScreenMusic();
         this.gameMusic.currentTime = 0;
-        this.gameMusic.play();
+        this.playMusic(this.gameMusic);
     }
 
     stopGameMusic() {
@@ -80,8 +90,7 @@ class AudioManager {
     }
 
     playStartButtonSound() {
-        this.startButtonSound.currentTime = 0;
-        this.startButtonSound.play();
+        this.playSfx(this.startButtonSound);
     }
 
     playGameOverSound() {
@@ -113,28 +122,23 @@ class AudioManager {
     }
 
     playChickenDeadSound() {
-        this.chickenDeadSound.currentTime = 0;
-        this.chickenDeadSound.play();
+        this.playSfx(this.chickenDeadSound);
     }
 
     playBottleThrowSound() {
-        this.bottleThrowSound.currentTime = 0;
-        this.bottleThrowSound.play();
+        this.playSfx(this.bottleThrowSound);
     }
 
     playBottleBreakSound() {
-        this.bottleBreakSound.currentTime = 0;
-        this.bottleBreakSound.play();
+        this.playSfx(this.bottleBreakSound);
     }
 
     playCoinSound() {
-        this.coinSound.currentTime = 0;
-        this.coinSound.play();
+        this.playSfx(this.coinSound);
     }
 
     playBottlePickupSound() {
-        this.bottlePickupSound.currentTime = 0;
-        this.bottlePickupSound.play();
+        this.playSfx(this.bottlePickupSound);
     }
 
     playFootstepLoop() {
@@ -149,6 +153,10 @@ class AudioManager {
     stopFootstepLoop() {
         this.footstepLoop.pause();
         this.footstepLoop.currentTime = 0;
+    }
+
+    playCharacterJumpSound() {
+        this.playSfx(this.characterJumpSound);
     }
 
     playEndbossIntroSound() {
@@ -185,7 +193,7 @@ class AudioManager {
         this.stopWinnerScreenMusic();
 
         this.gameOverScreenMusic.currentTime = 0;
-        this.gameOverScreenMusic.play();
+        this.playMusic(this.gameOverScreenMusic);
     }
 
     stopGameOverScreenMusic() {
@@ -198,7 +206,7 @@ class AudioManager {
         this.stopGameOverScreenMusic();
 
         this.winnerScreenMusic.currentTime = 0;
-        this.winnerScreenMusic.play();
+        this.playMusic(this.winnerScreenMusic);
     }
 
     stopWinnerScreenMusic() {
@@ -212,5 +220,92 @@ class AudioManager {
         this.stopGameOverScreenMusic();
         this.stopWinnerScreenMusic();
         this.stopFootstepLoop();
+    }
+
+    playMusic(music) {
+        this.currentMusic = music;
+
+        if (this.musicMuted) {
+            return;
+        }
+
+        music.volume = this.musicVolume;
+        music.play();
+    }
+
+    playSfx(sound) {
+        if (this.sfxMuted) {
+            return;
+        }
+
+        sound.currentTime = 0;
+        sound.volume = this.sfxVolume;
+        sound.play();
+    }
+
+    toggleMusic() {
+        this.musicMuted = !this.musicMuted;
+
+        if (this.musicMuted) {
+            this.pauseAllMusic();
+            return;
+        }
+
+        this.resumeCurrentMusic();
+    }
+
+    toggleSfx() {
+        this.sfxMuted = !this.sfxMuted;
+        this.applyVolumes();
+    }
+
+    applyVolumes() {
+        this.getMusicTracks().forEach(music => {
+            music.volume = this.musicMuted ? 0 : this.musicVolume;
+        });
+
+        this.getSfxTracks().forEach(sound => {
+            sound.volume = this.sfxMuted ? 0 : this.sfxVolume;
+        });
+    }
+
+    pauseAllMusic() {
+        this.getMusicTracks().forEach(music => {
+            music.pause();
+        });
+    }
+
+    resumeCurrentMusic() {
+        this.applyVolumes();
+
+        if (this.currentMusic) {
+            this.currentMusic.play();
+        }
+    }
+
+    getMusicTracks() {
+        return [
+            this.startScreenMusic,
+            this.gameMusic,
+            this.gameOverScreenMusic,
+            this.winnerScreenMusic
+        ].filter(track => track);
+    }
+
+    getSfxTracks() {
+        return [
+            this.startButtonSound,
+            this.gameOverSound,
+            this.characterHurtSound,
+            this.characterJumpSound,
+            this.chickenDeadSound,
+            this.bottleThrowSound,
+            this.bottleBreakSound,
+            this.coinSound,
+            this.bottlePickupSound,
+            this.winnerSound,
+            this.footstepLoop,
+            this.endbossIntroSound
+        ].filter(sound => sound);
     }
 }
