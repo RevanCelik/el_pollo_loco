@@ -8,6 +8,7 @@ class World {
     statusBar = new StatusbarHealth();
     coinBar = new StatusbarCoin();
     bottleBar = new StatusbarBottle();
+    endbossBar = new StatusbarEndboss();
     throwableObjects = [];
     canThrow = true;
     gameOverShown = false;
@@ -170,6 +171,7 @@ class World {
 
         if (enemy instanceof Endboss) {
             enemy.hitByBottle();
+            this.endbossBar.setPercentage(enemy.energy);
         }
     }
 
@@ -263,6 +265,7 @@ class World {
         this.addObjectToMap(this.level.coins);
         this.addObjectToMap(this.level.bottles);
         this.addObjectToMap(this.level.enemies);
+        this.addEndbossBar();
         this.addObjectToMap(this.throwableObjects);
 
         this.ctx.translate(-this.camera_x, 0);
@@ -272,6 +275,18 @@ class World {
         }
 
         requestAnimationFrame(() => this.draw());
+    }
+
+    addEndbossBar() {
+        let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+
+        if (!endboss || endboss.isDead()) {
+            return;
+        }
+
+        this.endbossBar.x = endboss.x + endboss.width / 2 - this.endbossBar.width / 2;
+        this.endbossBar.y = Math.max(endboss.y + 30, 20);
+        this.addToMap(this.endbossBar);
     }
 
     handleGameOver() {

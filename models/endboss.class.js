@@ -3,7 +3,7 @@ class Endboss extends MovableObject {
     height = 500;
     width = 400;
     y = -20;
-    energy = 60;
+    energy = 100;
 
     offset = {
         top: 120,
@@ -198,9 +198,14 @@ class Endboss extends MovableObject {
     }
 
     hitByBottle() {
-        this.energy -= 20;
+        if (this.energy <= 0) {
+            return;
+        }
+
+        this.energy -= 40;
 
         if (this.energy <= 0) {
+            this.energy = 0;
             this.startDeadAnimation();
         } else {
             this.startHurtAnimation();
