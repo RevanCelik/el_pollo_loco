@@ -136,6 +136,7 @@ class Endboss extends MovableObject {
         this.hasSeenPlayer = true;
         this.currentAnimation = 'alert';
         this.currentImage = 0;
+        audioManager.playEndbossIntroSound();
     }
 
     startHurtAnimation() {

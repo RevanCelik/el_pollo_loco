@@ -56,16 +56,19 @@ canvas {
     background-repeat: no-repeat;
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: flex-end;
-    padding-bottom: 70px;
+    align-items: center;
+    gap: 16px;
+
+    padding-top: 280px;
     box-sizing: border-box;
 
     z-index: 10;
 }
 
 .start-screen h1 {
-    font-family: rye;
+    font-family: 'Rye', cursive;
     font-size: 64px;
     color: white;
     margin: 0;
@@ -75,21 +78,39 @@ canvas {
     display: none;
 }
 
-.start-screen button {
-    font-family: rye;
+.menu-button {
+    font-family: 'Rye', cursive;
     font-size: 32px;
     padding: 12px 32px;
-    cursor: pointer;
-    background-color: #56b30f;
-    border: none;
+
+    border: 3px solid #5a2e0c;
     border-radius: 16px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    background-color: #f6b23c;
+    color: #3b1f08;
+
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+
+    box-shadow: 4px 4px 0 #3b1f08;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
-.start-screen button:hover {
-    background-color: #4a9c0c;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.menu-button:hover {
+    background-color: #e59d26;
     transform: scale(1.05);
+    box-shadow: 5px 5px 0 #3b1f08;
+}
+
+.menu-button:active {
+    transform: translateY(2px);
+    box-shadow: 2px 2px 0 #3b1f08;
+}
+
+.small-button {
+    font-size: 20px;
+    padding: 8px 18px;
 }
 
 .game-over-overlay,
@@ -100,8 +121,10 @@ canvas {
     height: 100%;
 
     display: flex;
-    justify-content: center;
-    align-items: flex-end;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
 
     padding-bottom: 60px;
     box-sizing: border-box;
@@ -123,26 +146,6 @@ canvas {
 .game-over-overlay.hidden,
 .winner-overlay.hidden {
     display: none;
-}
-
-.game-over-overlay button,
-.winner-overlay button {
-    font-family: 'Rye', cursive;
-    font-size: 32px;
-    padding: 12px 32px;
-    cursor: pointer;
-    background-color: #b3260f;
-    border: none;
-    border-radius: 16px;
-    color: white;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.game-over-overlay button:hover,
-.winner-overlay button:hover {
-    background-color: #8f1e0c;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transform: scale(1.05);
 }
 
 .fullscreen-button {
@@ -288,6 +291,53 @@ canvas {
     border-radius: 10px;
     font-size: 22px;
     font-weight: bold;
+}
+
+.impressum-page {
+    overflow: auto;
+    justify-content: flex-start;
+    padding: 48px 16px;
+    box-sizing: border-box;
+}
+
+.impressum-card {
+    width: min(90vw, 620px);
+    padding: 32px;
+
+    background-color: rgba(255, 241, 204, 0.88);
+    border: 4px solid #5a2e0c;
+    border-radius: 24px;
+    box-shadow: 8px 8px 0 #3b1f08;
+
+    color: #2b1606;
+    text-align: left;
+}
+
+.impressum-card h1 {
+    margin-top: 0;
+    margin-bottom: 24px;
+    font-size: 48px;
+    color: #3b1f08;
+    text-shadow: none;
+}
+
+.impressum-card h2 {
+    margin-top: 24px;
+    margin-bottom: 12px;
+    font-size: 28px;
+    color: #5a2e0c;
+    text-shadow: none;
+}
+
+.impressum-card p {
+    margin: 0 0 16px 0;
+    font-size: 20px;
+    line-height: 1.4;
+    text-shadow: none;
+}
+
+.impressum-card a {
+    margin-top: 16px;
 }
 
 /*--Smartphone responsiveness--*/

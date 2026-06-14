@@ -23,7 +23,7 @@
     <script src="models/bottle.class.js"></script>
     <script src="models/throwable-object.class.js"></script>
     <script src="models/coin.class.js"></script>
-    
+
     <script src="models/endboss.class.js"></script>
 
 
@@ -42,15 +42,27 @@
         </button>
         <div class="game-container">
             <div id="startScreen" class="start-screen">
-                <button onclick="startGame()">Start Game</button>
+                <button onclick="startGame()" class="menu-button">Start Game</button>
+
+                <a href="impressum.html" class="menu-button small-button">
+                    Impressum
+                </a>
             </div>
 
             <div id="gameOverOverlay" class="game-over-overlay hidden">
-                <button onclick="restartGame()">Restart Game</button>
+                <button onclick="restartGame()" class="menu-button">Restart Game</button>
+
+                <a href="impressum.html" class="menu-button small-button">
+                    Impressum
+                </a>
             </div>
 
             <div id="winnerOverlay" class="winner-overlay hidden">
-                <button onclick="restartGame()">Restart Game</button>
+                <button onclick="restartGame()" class="menu-button">Restart Game</button>
+
+                <a href="impressum.html" class="menu-button small-button">
+                    Impressum
+                </a>
             </div>
 
             <canvas id="canvas" width="720" height="480"></canvas>

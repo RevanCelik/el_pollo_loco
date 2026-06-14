@@ -20,6 +20,9 @@ class AudioManager {
 
     footstepLoop = new Audio('audio/footstep_sand_loop.wav');
 
+    endbossIntroSound = new Audio('audio/endboss_angry_chicken.wav');
+    isEndbossIntroSoundPlayed = false;
+
     isCharacterHurtSoundPlaying = false;
     isGameOverSoundPlaying = false;
 
@@ -43,6 +46,8 @@ class AudioManager {
 
         this.coinSound.volume = 0.45;
         this.bottlePickupSound.volume = 0.45;
+
+        this.endbossIntroSound.volume = 0.55;
 
         this.winnerSound.volume = 0.7;
 
@@ -144,6 +149,16 @@ class AudioManager {
     stopFootstepLoop() {
         this.footstepLoop.pause();
         this.footstepLoop.currentTime = 0;
+    }
+
+    playEndbossIntroSound() {
+        if (this.isEndbossIntroSoundPlayed) {
+            return;
+        }
+
+        this.isEndbossIntroSoundPlayed = true;
+        this.endbossIntroSound.currentTime = 0;
+        this.endbossIntroSound.play();
     }
 
     playWinnerSound() {
