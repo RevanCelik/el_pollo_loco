@@ -24,8 +24,9 @@ h1 {
     font-size: 48px;
     margin-bottom: 20px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
 
+    transform: translateY(-35px);
+}
 .game-title.hidden {
     visibility: hidden;
 }
@@ -151,7 +152,7 @@ canvas {
 .sound-controls {
     position: absolute;
     right: 8px;
-    top: 8px;
+    top: -46px;
 
     display: flex;
     gap: 8px;
@@ -160,48 +161,63 @@ canvas {
     z-index: 9999;
 }
 
-.sound-controls button {
-    height: 40px;
-    padding: 0 12px;
-
-    border: 2px solid white;
-    border-radius: 8px;
-
-    background-color: rgba(0, 0, 0, 0.6);
-    color: white;
-
-    font-family: Arial, sans-serif;
+.sound-controls button,
+.fullscreen-button {
+    font-family: 'Rye', cursive;
     font-size: 14px;
 
+    min-width: 52px;
+    height: 34px;
+    padding: 4px 10px;
+
+    border: 2px solid #5a2e0c;
+    border-radius: 10px;
+
+    background-color: #f6b23c;
+    color: #3b1f08;
+
     cursor: pointer;
-}
-
-.sound-controls button:hover {
-    filter: brightness(1.1);
-}
-
-.fullscreen-button {
-    width: 40px;
-    height: 40px;
-
-    border: 2px solid white;
-    border-radius: 8px;
-
-    background-color: rgba(0, 0, 0, 0.6);
-    color: white;
-
-    font-size: 28px;
-    line-height: 1;
+    box-shadow: 3px 3px 0 #3b1f08;
 
     display: flex;
     justify-content: center;
     align-items: center;
 
-    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
+.sound-controls button:not(.fullscreen-button) {
+    width: 90px;
+    white-space: nowrap;
+}
+
+.fullscreen-button {
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    padding: 0;
+    font-size: 18px;
+}
+
+.sound-controls button:hover,
 .fullscreen-button:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: #e59d26;
+    transform: scale(1.05);
+    box-shadow: 4px 4px 0 #3b1f08;
+}
+
+.sound-controls button:active,
+.fullscreen-button:active {
+    transform: translateY(2px);
+    box-shadow: 1px 1px 0 #3b1f08;
+}
+
+.fullscreen-button {
+    width: 34px;
+    min-width: 34px;
+    padding: 0;
+    font-size: 20px;
+    line-height: 1;
 }
 
 #fullscreen:fullscreen .sound-controls {
