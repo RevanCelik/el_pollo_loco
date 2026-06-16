@@ -23,6 +23,7 @@ class AudioManager {
     footstepLoop = new Audio('audio/footstep_sand_loop.wav');
 
     endbossIntroSound = new Audio('audio/endboss_angry_chicken.wav');
+    endbossDefeatedSound = new Audio('audio/endboss_defeated.wav');
     isEndbossIntroSoundPlayed = false;
 
     isCharacterHurtSoundPlaying = false;
@@ -58,6 +59,7 @@ class AudioManager {
         this.bottlePickupSound.volume = 0.45;
 
         this.endbossIntroSound.volume = 0.55;
+        this.endbossDefeatedSound.volume = 0.65;
 
         this.winnerSound.volume = 0.7;
 
@@ -98,9 +100,9 @@ class AudioManager {
             return;
         }
 
+        this.stopCharacterHurtSound();
         this.isGameOverSoundPlaying = true;
-        this.gameOverSound.currentTime = 0;
-        this.gameOverSound.play();
+        this.playSfx(this.gameOverSound);
     }
 
     playCharacterHurtSound(characterIsDead) {
@@ -113,12 +115,17 @@ class AudioManager {
         }
 
         this.isCharacterHurtSoundPlaying = true;
-        this.characterHurtSound.currentTime = 0;
-        this.characterHurtSound.play();
+        this.playSfx(this.characterHurtSound);
 
         this.characterHurtSound.onended = () => {
             this.isCharacterHurtSoundPlaying = false;
         };
+    }
+
+    stopCharacterHurtSound() {
+        this.characterHurtSound.pause();
+        this.characterHurtSound.currentTime = 0;
+        this.isCharacterHurtSoundPlaying = false;
     }
 
     playChickenDeadSound() {
@@ -167,6 +174,10 @@ class AudioManager {
         this.isEndbossIntroSoundPlayed = true;
         this.endbossIntroSound.currentTime = 0;
         this.endbossIntroSound.play();
+    }
+
+    playEndbossDefeatedSound() {
+        this.playSfx(this.endbossDefeatedSound);
     }
 
     playWinnerSound() {
@@ -305,7 +316,8 @@ class AudioManager {
             this.bottlePickupSound,
             this.winnerSound,
             this.footstepLoop,
-            this.endbossIntroSound
+            this.endbossIntroSound,
+            this.endbossDefeatedSound
         ].filter(sound => sound);
     }
 }

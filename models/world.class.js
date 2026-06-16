@@ -223,8 +223,12 @@ class World {
 
         this.winnerShown = true;
         audioManager.stopFootstepLoop();
-        audioManager.playWinnerSoundThenScreenMusic();
-        this.showWinnerOverlay();
+        audioManager.playEndbossDefeatedSound();
+
+        setTimeout(() => {
+            audioManager.playWinnerSoundThenScreenMusic();
+            this.showWinnerOverlay();
+        }, 1000);
     }
 
     showWinnerOverlay() {
