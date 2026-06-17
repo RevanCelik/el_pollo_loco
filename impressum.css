@@ -1,0 +1,54 @@
+.impressum-page {
+    overflow: auto;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 100vh;
+    padding: clamp(20px, 5vw, 48px) 16px;
+    box-sizing: border-box;
+}
+
+.impressum-card {
+    width: min(92vw, 620px);
+    padding: clamp(18px, 5vw, 32px);
+
+    background-color: rgba(255, 241, 204, 0.88);
+    border: clamp(2px, 0.8vw, 4px) solid #5a2e0c;
+    border-radius: clamp(16px, 4vw, 24px);
+    box-shadow: clamp(4px, 1.5vw, 8px) clamp(4px, 1.5vw, 8px) 0 #3b1f08;
+
+    color: #2b1606;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+.impressum-card h1 {
+    margin-top: 0;
+    margin-bottom: clamp(16px, 4vw, 24px);
+
+    font-size: clamp(30px, 8vw, 48px);
+    color: #3b1f08;
+    text-shadow: none;
+    transform: none;
+}
+
+.impressum-card h2 {
+    margin-top: clamp(18px, 4vw, 24px);
+    margin-bottom: clamp(8px, 2vw, 12px);
+
+    font-size: clamp(20px, 5vw, 28px);
+    color: #5a2e0c;
+    text-shadow: none;
+}
+
+.impressum-card p {
+    margin: 0 0 clamp(12px, 3vw, 16px) 0;
+
+    font-size: clamp(15px, 3.8vw, 20px);
+    line-height: 1.45;
+    text-shadow: none;
+    word-break: break-word;
+}
+
+.impressum-card a {
+    margin-top: 16px;
+}

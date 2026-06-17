@@ -1,0 +1,66 @@
+/*--Smartphone responsiveness--*/
+
+@media only screen and (max-width: 720px) {
+    canvas {
+        width: 100%;
+    }
+
+    .mobile-controls {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 16px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding: 0 24px;
+        box-sizing: border-box;
+
+        z-index: 30;
+        pointer-events: none;
+    }
+
+    .mobile-controls-left,
+    .mobile-controls-right {
+        display: flex;
+        gap: 16px;
+        pointer-events: auto;
+    }
+
+    .controls-info {
+        font-size: 14px;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding: 0 12px;
+        text-align: center;
+    }
+}
+
+@media only screen and (max-height: 480px) {
+    h1 {
+        display: none;
+    }
+
+    .game-container {
+        width: min(100vw, calc(100vh * 1.5), 720px);
+    }
+
+    .controls-info {
+        display: none;
+    }
+
+    .impressum-page {
+        padding: 16px 10px;
+    }
+
+    .impressum-card {
+        width: 100%;
+    }
+
+    .impressum-card .menu-button {
+        font-size: 16px;
+        padding: 8px 16px;
+    }
+}

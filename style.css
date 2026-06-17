@@ -27,6 +27,7 @@ h1 {
 
     transform: translateY(-35px);
 }
+
 .game-title.hidden {
     visibility: hidden;
 }
@@ -58,11 +59,11 @@ canvas {
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
-    gap: 16px;
+    gap: clamp(8px, 2vw, 16px);
 
-    padding-top: 280px;
+    padding-bottom: clamp(18px, 7vw, 54px);
     box-sizing: border-box;
 
     z-index: 10;
@@ -81,8 +82,8 @@ canvas {
 
 .menu-button {
     font-family: 'Rye', cursive;
-    font-size: 32px;
-    padding: 12px 32px;
+    font-size: clamp(20px, 4vw, 32px);
+    padding: clamp(8px, 1.8vw, 12px) clamp(22px, 5vw, 32px);
 
     border: 3px solid #5a2e0c;
     border-radius: 16px;
@@ -110,8 +111,8 @@ canvas {
 }
 
 .small-button {
-    font-size: 20px;
-    padding: 8px 18px;
+    font-size: clamp(14px, 2.8vw, 20px);
+    padding: clamp(6px, 1.4vw, 8px) clamp(14px, 3.5vw, 18px);
 }
 
 .game-over-overlay,
@@ -331,105 +332,4 @@ canvas {
     padding: 8px 14px;
     border-radius: 10px;
     font-size: 22px;
-}
-
-.impressum-page {
-    overflow: auto;
-    justify-content: flex-start;
-    padding: 48px 16px;
-    box-sizing: border-box;
-}
-
-.impressum-card {
-    width: min(90vw, 620px);
-    padding: 32px;
-
-    background-color: rgba(255, 241, 204, 0.88);
-    border: 4px solid #5a2e0c;
-    border-radius: 24px;
-    box-shadow: 8px 8px 0 #3b1f08;
-
-    color: #2b1606;
-    text-align: left;
-}
-
-.impressum-card h1 {
-    margin-top: 0;
-    margin-bottom: 24px;
-    font-size: 48px;
-    color: #3b1f08;
-    text-shadow: none;
-}
-
-.impressum-card h2 {
-    margin-top: 24px;
-    margin-bottom: 12px;
-    font-size: 28px;
-    color: #5a2e0c;
-    text-shadow: none;
-}
-
-.impressum-card p {
-    margin: 0 0 16px 0;
-    font-size: 20px;
-    line-height: 1.4;
-    text-shadow: none;
-}
-
-.impressum-card a {
-    margin-top: 16px;
-}
-
-/*--Smartphone responsiveness--*/
-
-@media only screen and (max-width: 720px) {
-    canvas {
-        width: 100%;
-    }
-
-    .mobile-controls {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 16px;
-
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        padding: 0 24px;
-        box-sizing: border-box;
-
-        z-index: 30;
-        pointer-events: none;
-    }
-
-    .mobile-controls-left,
-    .mobile-controls-right {
-        display: flex;
-        gap: 16px;
-        pointer-events: auto;
-    }
-
-    .controls-info {
-        font-size: 14px;
-        gap: 12px;
-        flex-wrap: wrap;
-        padding: 0 12px;
-        text-align: center;
-    }
-}
-
-@media only screen and (max-height: 480px) {
-    h1 {
-        display: none;
-    }
-
-    .game-container {
-        width: min(100vw, calc(100vh * 1.5), 720px);
-    }
-
-    .controls-info {
-        display: none;
-    }
 }
