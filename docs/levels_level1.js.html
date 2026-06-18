@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: levels/level1.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: levels/level1.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Returns a random integer within the specified inclusive range.
+ *
+ * @param {number} min - The minimum possible value.
+ * @param {number} max - The maximum possible value.
+ * @returns {number} A random integer between min and max.
+ */
+function getRandomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/**
+ * Randomizes the order of the elements in an array.
+ *
+ * @param {Array} array - The array to shuffle.
+ * @returns {Array} The shuffled array.
+ */
+function shuffleArray(array) {
+    return array.sort(() => Math.random() - 0.5);
+}
+
+/**
+ * Creates coins at randomized predefined positions.
+ *
+ * @returns {Coin[]} The generated coins.
+ */
+function createRandomCoins() {
+    let coins = [];
+    let xPositions = shuffleArray([400, 650, 900, 1150, 1400, 1650, 1900]);
+    let yPositions = [160, 200, 240, 280, 320];
+
+    for (let i = 0; i &lt; 5; i++) {
+        let x = xPositions[i];
+        let y = yPositions[getRandomNumber(0, yPositions.length - 1)];
+        coins.push(new Coin(x, y));
+    }
+
+    return coins;
+}
+
+/**
+ * Creates bottles at randomized predefined positions.
+ *
+ * @returns {Bottle[]} The generated bottles.
+ */
+function createRandomBottles() {
+    let bottles = [];
+    let xPositions = shuffleArray([500, 750, 1000, 1250, 1500, 1750, 2000]);
+    let yPositions = [180, 230, 280, 330];
+
+    for (let i = 0; i &lt; 5; i++) {
+        let x = xPositions[i];
+        let y = yPositions[getRandomNumber(0, yPositions.length - 1)];
+        bottles.push(new Bottle(x, y));
+    }
+
+    return bottles;
+}
+
+/**
+ * Creates chickens at randomized predefined horizontal positions.
+ *
+ * @returns {Chicken[]} The generated chickens.
+ */
+function createRandomChickens() {
+    let chickens = [];
+    let xPositions = shuffleArray([500, 800, 1100, 1400, 1700, 2000]);
+
+    for (let i = 0; i &lt; 5; i++) {
+        chickens.push(new Chicken(xPositions[i]));
+    }
+
+    return chickens;
+}
+
+/**
+ * The first game level with enemies, clouds, backgrounds, coins, and bottles.
+ *
+ * @type {Level}
+ */
+const level1 = new Level(
+
+    [...createRandomChickens(), new Endboss()],
+    [new Cloud()],
+    [
+        new BackgroundObject('img/5_background/layers/air.png', -719),
+        new BackgroundObject('img/5_background/layers/3_third_layer/2.png', -719),
+        new BackgroundObject('img/5_background/layers/2_second_layer/2.png', -719),
+        new BackgroundObject('img/5_background/layers/1_first_layer/2.png', -719),
+
+        new BackgroundObject('img/5_background/layers/air.png', 0),
+        new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 0),
+        new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 0),
+        new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 0),
+        new BackgroundObject('img/5_background/layers/air.png', 719),
+        new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 719),
+        new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 719),
+        new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 719),
+
+        new BackgroundObject('img/5_background/layers/air.png', 719 * 2),
+        new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 719 * 2),
+        new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 719 * 2),
+        new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 719 * 2),
+        new BackgroundObject('img/5_background/layers/air.png', 719 * 3),
+        new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 719 * 3),
+        new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 719 * 3),
+        new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 719 * 3),
+    ],
+    createRandomCoins(),
+    createRandomBottles()
+
+
+);  </code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AudioManager.html">AudioManager</a></li><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="Bottle.html">Bottle</a></li><li><a href="Character.html">Character</a></li><li><a href="Chicken.html">Chicken</a></li><li><a href="Cloud.html">Cloud</a></li><li><a href="Coin.html">Coin</a></li><li><a href="DrawableObject.html">DrawableObject</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="Level.html">Level</a></li><li><a href="StatusbarBottle.html">StatusbarBottle</a></li><li><a href="StatusbarCoin.html">StatusbarCoin</a></li><li><a href="StatusbarEndboss.html">StatusbarEndboss</a></li><li><a href="StatusbarHealth.html">StatusbarHealth</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindTouchButton">bindTouchButton</a></li><li><a href="global.html#bindTouchControls">bindTouchControls</a></li><li><a href="global.html#createRandomBottles">createRandomBottles</a></li><li><a href="global.html#createRandomChickens">createRandomChickens</a></li><li><a href="global.html#createRandomCoins">createRandomCoins</a></li><li><a href="global.html#getRandomNumber">getRandomNumber</a></li><li><a href="global.html#hideMobileControls">hideMobileControls</a></li><li><a href="global.html#hideStartScreen">hideStartScreen</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initStartScreen">initStartScreen</a></li><li><a href="global.html#level1">level1</a></li><li><a href="global.html#playStartScreenMusicOnce">playStartScreenMusicOnce</a></li><li><a href="global.html#restartGame">restartGame</a></li><li><a href="global.html#showGameTitle">showGameTitle</a></li><li><a href="global.html#showMobileControls">showMobileControls</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#toggleMusic">toggleMusic</a></li><li><a href="global.html#toggleSfx">toggleSfx</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Thu Jun 18 2026 06:44:37 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

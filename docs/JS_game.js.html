@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: JS/game.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: JS/game.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>let canvas;
+let world;
+let keyboard = new Keyboard();
+let audioManager = new AudioManager();
+
+/**
+ * Initializes the start screen, touch controls, and the initial music listener.
+ *
+ * @returns {void}
+ */
+function initStartScreen() {
+    canvas = document.getElementById('canvas');
+    bindTouchControls();
+    document.addEventListener('click', playStartScreenMusicOnce);
+}
+
+/**
+ * Plays the start-screen music once and removes the associated click listener.
+ *
+ * @returns {void}
+ */
+function playStartScreenMusicOnce() {
+    audioManager.playStartScreenMusic();
+    document.removeEventListener('click', playStartScreenMusicOnce);
+}
+
+/**
+ * Starts the game and switches the user interface to the active game view.
+ *
+ * @returns {void}
+ */
+function startGame() {
+    audioManager.playStartButtonSound();
+
+    hideStartScreen();
+    showGameTitle();
+    showMobileControls();
+    init();
+
+    setTimeout(() => {
+        audioManager.playGameMusic();
+    }, 250);
+}
+
+/**
+ * Displays the mobile control buttons.
+ *
+ * @returns {void}
+ */
+function showMobileControls() {
+    document.getElementById('mobileControls').classList.remove('hidden');
+}
+
+/**
+ * Hides the mobile control buttons.
+ *
+ * @returns {void}
+ */
+function hideMobileControls() {
+    document.getElementById('mobileControls').classList.add('hidden');
+}
+
+/**
+ * Hides the start screen.
+ *
+ * @returns {void}
+ */
+function hideStartScreen() {
+    document.getElementById('startScreen').classList.add('hidden');
+}
+
+/**
+ * Displays the game title.
+ *
+ * @returns {void}
+ */
+function showGameTitle() {
+    document.getElementById('gameTitle').classList.remove('hidden');
+}
+
+/**
+ * Initializes the canvas and creates the game world.
+ *
+ * @returns {void}
+ */
+function init() {
+    canvas = document.getElementById('canvas');
+    world = new World(canvas, keyboard);
+
+    console.log('My Character:', world.character);
+}
+
+/**
+ * Plays the start-button sound and reloads the page to restart the game.
+ *
+ * @returns {void}
+ */
+function restartGame() {
+    audioManager.playStartButtonSound();
+
+    setTimeout(() => {
+        audioManager.stopAllMusic();
+        location.reload();
+    }, 250);
+}
+
+/**
+ * Updates the keyboard state when a supported key is pressed.
+ *
+ * @param {KeyboardEvent} e - The keyboard event.
+ * @returns {void}
+ */
+window.addEventListener("keydown", (e) => {
+    if (e.code === "ArrowRight") {
+        keyboard.RIGHT = true;
+    }
+
+    if (e.code === "ArrowLeft") {
+        keyboard.LEFT = true;
+    }
+
+    if (e.code === "ArrowUp") {
+        keyboard.UP = true;
+    }
+
+    if (e.code === "ArrowDown") {
+        keyboard.DOWN = true;
+    }
+
+    if (e.code === "Space") {
+        keyboard.SPACE = true;
+    }
+
+    if (e.code === "KeyD") {
+        keyboard.D = true;
+    }
+});
+
+/**
+ * Updates the keyboard state when a supported key is released.
+ *
+ * @param {KeyboardEvent} e - The keyboard event.
+ * @returns {void}
+ */
+window.addEventListener("keyup", (e) => {
+    if (e.code === "ArrowRight") {
+        keyboard.RIGHT = false;
+    }
+
+    if (e.code === "ArrowLeft") {
+        keyboard.LEFT = false;
+    }
+
+    if (e.code === "ArrowUp") {
+        keyboard.UP = false;
+    }
+
+    if (e.code === "ArrowDown") {
+        keyboard.DOWN = false;
+    }
+
+    if (e.code === "Space") {
+        keyboard.SPACE = false;
+    }
+
+    if (e.code === "KeyD") {
+        keyboard.D = false;
+    }
+});
+
+/**
+ * Connects a touch button to a keyboard-state property.
+ *
+ * @param {string} buttonId - The ID of the touch-control button.
+ * @param {string} key - The keyboard-state property controlled by the button.
+ * @returns {void}
+ */
+function bindTouchButton(buttonId, key) {
+    let button = document.getElementById(buttonId);
+
+    if (!button) {
+        return;
+    }
+
+    button.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard[key] = true;
+    });
+
+    button.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard[key] = false;
+    });
+}
+
+/**
+ * Binds all mobile touch buttons to their corresponding controls.
+ *
+ * @returns {void}
+ */
+function bindTouchControls() {
+    bindTouchButton('btnLeft', 'LEFT');
+    bindTouchButton('btnRight', 'RIGHT');
+    bindTouchButton('btnSpace', 'SPACE');
+    bindTouchButton('btnD', 'D');
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AudioManager.html">AudioManager</a></li><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="Bottle.html">Bottle</a></li><li><a href="Character.html">Character</a></li><li><a href="Chicken.html">Chicken</a></li><li><a href="Cloud.html">Cloud</a></li><li><a href="Coin.html">Coin</a></li><li><a href="DrawableObject.html">DrawableObject</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="Level.html">Level</a></li><li><a href="StatusbarBottle.html">StatusbarBottle</a></li><li><a href="StatusbarCoin.html">StatusbarCoin</a></li><li><a href="StatusbarEndboss.html">StatusbarEndboss</a></li><li><a href="StatusbarHealth.html">StatusbarHealth</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindTouchButton">bindTouchButton</a></li><li><a href="global.html#bindTouchControls">bindTouchControls</a></li><li><a href="global.html#createRandomBottles">createRandomBottles</a></li><li><a href="global.html#createRandomChickens">createRandomChickens</a></li><li><a href="global.html#createRandomCoins">createRandomCoins</a></li><li><a href="global.html#getRandomNumber">getRandomNumber</a></li><li><a href="global.html#hideMobileControls">hideMobileControls</a></li><li><a href="global.html#hideStartScreen">hideStartScreen</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initStartScreen">initStartScreen</a></li><li><a href="global.html#level1">level1</a></li><li><a href="global.html#playStartScreenMusicOnce">playStartScreenMusicOnce</a></li><li><a href="global.html#restartGame">restartGame</a></li><li><a href="global.html#showGameTitle">showGameTitle</a></li><li><a href="global.html#showMobileControls">showMobileControls</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#toggleMusic">toggleMusic</a></li><li><a href="global.html#toggleSfx">toggleSfx</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Thu Jun 18 2026 06:44:37 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
