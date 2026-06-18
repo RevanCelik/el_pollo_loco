@@ -5,6 +5,13 @@ class ThrowableObject extends Bottle {
     shouldRemove = false;
     hasHit = false;
 
+    /**
+     * Creates a throwable bottle at the specified position
+     * and starts its movement and animation.
+     *
+     * @param {number} x - The horizontal starting position.
+     * @param {number} y - The vertical starting position.
+     */
     constructor(x, y) {
         super(x, y, false);
         this.loadImage(this.IMAGES_THROWING[0]);
@@ -14,6 +21,12 @@ class ThrowableObject extends Bottle {
         this.animateThrowableObject();
     }
 
+    /**
+     * Applies the throwing movement and triggers the splash
+     * when the object reaches the ground.
+     *
+     * @returns {void}
+     */
     throw() {
         this.speedY = 20;
         this.applyGravity();
@@ -29,6 +42,12 @@ class ThrowableObject extends Bottle {
         }, 1000 / 60);
     }
 
+    /**
+     * Starts the animation interval for the rotating
+     * and splashing bottle images.
+     *
+     * @returns {void}
+     */
     animateThrowableObject() {
         this.animationInterval = setInterval(() => {
             if (this.isSplashing) {
@@ -39,6 +58,12 @@ class ThrowableObject extends Bottle {
         }, 1000 / 10);
     }
 
+    /**
+     * Starts the splash state and marks the object
+     * for removal after the splash animation.
+     *
+     * @returns {void}
+     */
     splash() {
         if (this.isSplashing) {
             return;

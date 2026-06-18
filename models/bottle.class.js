@@ -1,3 +1,8 @@
+/**
+ * Represents a collectible or throwable salsa bottle.
+ *
+ * @extends MovableObject
+ */
 class Bottle extends MovableObject {
     width = 100;
     height = 100;
@@ -27,6 +32,13 @@ class Bottle extends MovableObject {
     imageCache = [];
     currentImage = 0;
 
+    /**
+     * Creates a bottle at the specified position.
+     *
+     * @param {number} x - The horizontal position.
+     * @param {number} y - The vertical position.
+     * @param {boolean} [shouldAnimate=true] - Whether to start the bottle animation.
+     */
     constructor(x, y, shouldAnimate = true) {
         super();
         this.loadImage('img/6_salsa_bottle/1_salsa_bottle_on_ground.png');
@@ -40,11 +52,23 @@ class Bottle extends MovableObject {
         }
     }
 
+    /**
+     * Loads a single image into the bottle's image element.
+     *
+     * @param {string} path - The path to the image.
+     * @returns {void}
+     */
     loadImage(path) {
         this.img.src = path;
 
     }
 
+    /**
+     * Loads multiple images into the image cache.
+     *
+     * @param {string[]} arr - The image paths to load.
+     * @returns {void}
+     */
     loadImages(arr) {
         arr.forEach((path) => {
             let img = new Image();
@@ -53,6 +77,11 @@ class Bottle extends MovableObject {
         });
     }
 
+    /**
+     * Starts the looping bottle animation.
+     *
+     * @returns {void}
+     */
     animate() {
 
         setInterval(() => {

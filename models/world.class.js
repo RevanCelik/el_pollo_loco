@@ -15,6 +15,13 @@ class World {
     winnerShown = false;
     gameOverStarted = false;
 
+    /**
+     * Creates a new game world and initializes rendering,
+     * object references, enemies, and collision checks.
+     *
+     * @param {HTMLCanvasElement} canvas - The canvas used to render the game.
+     * @param {Keyboard} keyboard - The keyboard state used to control the character.
+     */
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -26,6 +33,11 @@ class World {
         this.run();
     }
 
+    /**
+     * Assigns the current world instance to the character and all enemies.
+     *
+     * @returns {void}
+     */
     setWorld() {
         this.character.world = this;
 
@@ -34,12 +46,23 @@ class World {
         });
     }
 
+    /**
+     * Starts the animations of all enemies in the current level.
+     *
+     * @returns {void}
+     */
     startEnemies() {
         this.level.enemies.forEach(enemy => {
             enemy.startAnimation();
         });
     }
 
+    /**
+     * Starts the main game interval for collision checks,
+     * object interactions, and cleanup operations.
+     *
+     * @returns {void}
+     */
     run() {
         setInterval(() => {
             if (this.character.isDead() || this.winnerShown) {
@@ -58,6 +81,12 @@ class World {
         }, 1000 / 60);
     }
 
+    /**
+     * Checks whether the player is throwing a bottle and creates
+     * a throwable object when all conditions are met.
+     *
+     * @returns {void}
+     */
     checkThrowObjects() {
         if (this.keyboard.D && this.character.bottles > 0 && this.canThrow) {
             let throwableObject = new ThrowableObject(this.character.x + 100, this.character.y + 100);
@@ -75,6 +104,11 @@ class World {
         }
     }
 
+    /**
+     * Checks collisions between the character and all enemies.
+     *
+     * @returns {void}
+     */
     checkCollisions() {
         this.level.enemies.forEach((enemy, index) => {
             if (this.character.isColliding(enemy)) {
@@ -83,6 +117,13 @@ class World {
         });
     }
 
+    /**
+     * Handles a collision between the character and an enemy.
+     *
+     * @param {MovableObject} enemy - The enemy involved in the collision.
+     * @param {number} index - The position of the enemy in the enemies array.
+     * @returns {void}
+     */
     handleEnemyCollision(enemy, index) {
         if (enemy instanceof Chicken && this.isTopCollision(enemy)) {
             audioManager.playChickenDeadSound();
@@ -103,6 +144,12 @@ class World {
         }
     }
 
+    /**
+     * Checks whether the character is colliding with an enemy from above.
+     *
+     * @param {MovableObject} enemy - The enemy to check.
+     * @returns {boolean} True if the character lands on the enemy from above.
+     */
     isTopCollision(enemy) {
         let characterFeet = this.character.y + this.character.height - this.character.offset.bottom;
         let enemyTop = enemy.y + enemy.offset.top;
@@ -121,6 +168,11 @@ class World {
             characterCenterX < enemyRight;
     }
 
+    /**
+     * Checks whether the character is collecting any coins.
+     *
+     * @returns {void}
+     */
     checkCoinsCollisions() {
         this.level.coins.forEach((coin, index) => {
             if (this.character.isColliding(coin)) {
@@ -132,6 +184,11 @@ class World {
         });
     }
 
+    /**
+     * Checks whether the character is collecting any bottles.
+     *
+     * @returns {void}
+     */
     checkBottleCollisions() {
         this.level.bottles.forEach((bottle, index) => {
             if (this.character.isColliding(bottle)) {
@@ -143,6 +200,11 @@ class World {
         });
     }
 
+    /**
+     * Checks collisions between thrown bottles and enemies.
+     *
+     * @returns {void}
+     */
     checkThrowableObjectCollisions() {
         this.throwableObjects.forEach((throwableObject, bottleIndex) => {
             this.level.enemies.forEach((enemy, enemyIndex) => {
@@ -153,6 +215,14 @@ class World {
         });
     }
 
+    /**
+     * Handles a collision between a thrown bottle and an enemy.
+     *
+     * @param {MovableObject} enemy - The enemy hit by the bottle.
+     * @param {number} enemyIndex - The position of the enemy in the enemies array.
+     * @param {number} bottleIndex - The position of the bottle in the throwable objects array.
+     * @returns {void}
+     */
     handleThrowableObjectCollision(enemy, enemyIndex, bottleIndex) {
         let bottle = this.throwableObjects[bottleIndex];
 
@@ -175,10 +245,20 @@ class World {
         }
     }
 
+    /**
+     * Removes bottles that have completed their splash animation.
+     *
+     * @returns {void}
+     */
     removeSplashedBottles() {
         this.throwableObjects = this.throwableObjects.filter(bottle => !bottle.shouldRemove);
     }
 
+    /**
+     * Removes defeated endbosses and displays the winner screen.
+     *
+     * @returns {void}
+     */
     removeDeadEndbosses() {
         this.level.enemies.forEach((enemy, index) => {
             if (enemy instanceof Endboss && enemy.isDeadAnimationPlayed) {
@@ -188,6 +268,11 @@ class World {
         });
     }
 
+    /**
+     * Checks whether a thrown bottle has collided with the ground.
+     *
+     * @returns {void}
+     */
     checkBottleGroundCollision() {
         this.throwableObjects.forEach(bottle => {
             if (!bottle.hasHit && bottle.y > 360) {
@@ -198,6 +283,11 @@ class World {
         });
     }
 
+    /**
+     * Starts or stops the footstep loop depending on the character state.
+     *
+     * @returns {void}
+     */
     checkFootstepLoop() {
         if (this.shouldPlayFootstepLoop()) {
             audioManager.playFootstepLoop();
@@ -206,6 +296,11 @@ class World {
         }
     }
 
+    /**
+     * Checks whether the footstep sound should currently be playing.
+     *
+     * @returns {boolean} True if the character is walking on the ground.
+     */
     shouldPlayFootstepLoop() {
         return (
             (this.keyboard.RIGHT || this.keyboard.LEFT) &&
@@ -216,6 +311,11 @@ class World {
         );
     }
 
+    /**
+     * Starts the winner sequence after the endboss has been defeated.
+     *
+     * @returns {void}
+     */
     handleWinnerScreen() {
         if (this.winnerShown) {
             return;
@@ -231,12 +331,22 @@ class World {
         }, 1000);
     }
 
+    /**
+     * Displays the winner overlay and hides the game title and mobile controls.
+     *
+     * @returns {void}
+     */
     showWinnerOverlay() {
         document.getElementById('winnerOverlay').classList.remove('hidden');
         document.getElementById('gameTitle').classList.add('hidden');
         hideMobileControls();
     }
 
+    /**
+     * Starts the delayed game-over sequence.
+     *
+     * @returns {void}
+     */
     startGameOverSequence() {
         if (this.gameOverStarted) return;
 
@@ -251,6 +361,11 @@ class World {
     }
 
 
+    /**
+     * Draws all visible objects and interface elements on the canvas.
+     *
+     * @returns {void}
+     */
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -281,6 +396,11 @@ class World {
         requestAnimationFrame(() => this.draw());
     }
 
+    /**
+     * Draws the endboss status bar above the active endboss.
+     *
+     * @returns {void}
+     */
     addEndbossBar() {
         let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
 
@@ -293,6 +413,11 @@ class World {
         this.addToMap(this.endbossBar);
     }
 
+    /**
+     * Displays the game-over screen once.
+     *
+     * @returns {void}
+     */
     handleGameOver() {
         if (this.gameOverShown) {
             return;
@@ -303,18 +428,35 @@ class World {
         this.showGameOverOverlay();
     }
 
+    /**
+     * Displays the game-over overlay and hides the game title and mobile controls.
+     *
+     * @returns {void}
+     */
     showGameOverOverlay() {
         document.getElementById('gameOverOverlay').classList.remove('hidden');
         document.getElementById('gameTitle').classList.add('hidden');
         hideMobileControls();
     }
 
+    /**
+     * Adds all objects from an array to the canvas.
+     *
+     * @param {DrawableObject[]} objects - The objects to draw.
+     * @returns {void}
+     */
     addObjectToMap(objects) {
         objects.forEach(o => {
             this.addToMap(o);
         });
     }
 
+    /**
+     * Draws a single object on the canvas and handles its direction.
+     *
+     * @param {DrawableObject} mo - The object to draw.
+     * @returns {void}
+     */
     addToMap(mo) {
         if (mo.otherDirection) {
             this.flipImage(mo);
@@ -329,6 +471,12 @@ class World {
         }
     }
 
+    /**
+     * Flips an object's image horizontally before drawing.
+     *
+     * @param {DrawableObject} mo - The object whose image should be flipped.
+     * @returns {void}
+     */
     flipImage(mo) {
         this.ctx.save();
         this.ctx.translate(mo.width, 0);
@@ -336,6 +484,12 @@ class World {
         mo.x = mo.x * -1;
     }
 
+    /**
+     * Restores an object's position and the canvas state after flipping.
+     *
+     * @param {DrawableObject} mo - The previously flipped object.
+     * @returns {void}
+     */
     flipImageBack(mo) {
         mo.x = mo.x * -1;
         this.ctx.restore();

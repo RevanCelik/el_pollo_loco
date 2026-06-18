@@ -1,11 +1,29 @@
+/**
+ * Returns a random integer within the specified inclusive range.
+ *
+ * @param {number} min - The minimum possible value.
+ * @param {number} max - The maximum possible value.
+ * @returns {number} A random integer between min and max.
+ */
 function getRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+/**
+ * Randomizes the order of the elements in an array.
+ *
+ * @param {Array} array - The array to shuffle.
+ * @returns {Array} The shuffled array.
+ */
 function shuffleArray(array) {
     return array.sort(() => Math.random() - 0.5);
 }
 
+/**
+ * Creates coins at randomized predefined positions.
+ *
+ * @returns {Coin[]} The generated coins.
+ */
 function createRandomCoins() {
     let coins = [];
     let xPositions = shuffleArray([400, 650, 900, 1150, 1400, 1650, 1900]);
@@ -20,6 +38,11 @@ function createRandomCoins() {
     return coins;
 }
 
+/**
+ * Creates bottles at randomized predefined positions.
+ *
+ * @returns {Bottle[]} The generated bottles.
+ */
 function createRandomBottles() {
     let bottles = [];
     let xPositions = shuffleArray([500, 750, 1000, 1250, 1500, 1750, 2000]);
@@ -34,6 +57,11 @@ function createRandomBottles() {
     return bottles;
 }
 
+/**
+ * Creates chickens at randomized predefined horizontal positions.
+ *
+ * @returns {Chicken[]} The generated chickens.
+ */
 function createRandomChickens() {
     let chickens = [];
     let xPositions = shuffleArray([500, 800, 1100, 1400, 1700, 2000]);
@@ -45,6 +73,11 @@ function createRandomChickens() {
     return chickens;
 }
 
+/**
+ * The first game level with enemies, clouds, backgrounds, coins, and bottles.
+ *
+ * @type {Level}
+ */
 const level1 = new Level(
 
     [...createRandomChickens(), new Endboss()],

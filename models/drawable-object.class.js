@@ -1,3 +1,6 @@
+/**
+ * Represents a drawable object within the game world.
+ */
 class DrawableObject {
     img;
     imageCache = {};
@@ -15,15 +18,33 @@ class DrawableObject {
         bottom: 0
     };
 
+    /**
+     * Loads a single image from the specified path.
+     *
+     * @param {string} path - The path to the image file.
+     * @returns {void}
+     */
     loadImage(path) {
         this.img = new Image();
         this.img.src = path;
     }
 
+    /**
+     * Draws the object on the provided canvas context.
+     *
+     * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
+     * @returns {void}
+     */
     draw(ctx) {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
+    /**
+     * Draws the collision frame around supported game objects.
+     *
+     * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
+     * @returns {void}
+     */
     drawFrame(ctx) {
         if (this instanceof Character || this instanceof Chicken || this instanceof Endboss || this instanceof ThrowableObject || this instanceof Coin || this instanceof Bottle) {
             ctx.beginPath();
@@ -42,6 +63,12 @@ class DrawableObject {
     }
 
 
+    /**
+     * Loads multiple images and stores them in the image cache.
+     *
+     * @param {string[]} arr - An array containing the image paths.
+     * @returns {void}
+     */
     loadImages(arr) {
         arr.forEach((path) => {
             let img = new Image();
@@ -49,8 +76,4 @@ class DrawableObject {
             this.imageCache[path] = img;
         });
     }
-
-
-
-
 }

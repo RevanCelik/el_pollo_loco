@@ -4,7 +4,7 @@ let keyboard = new Keyboard();
 let audioManager = new AudioManager();
 
 /**
- * Initializes the start screen and registers the initial user interactions.
+ * Initializes the start screen, touch controls, and the initial music listener.
  *
  * @returns {void}
  */
@@ -15,7 +15,7 @@ function initStartScreen() {
 }
 
 /**
- * Starts the start-screen music after the first click and removes its listener.
+ * Plays the start-screen music once and removes the associated click listener.
  *
  * @returns {void}
  */
@@ -25,30 +25,25 @@ function playStartScreenMusicOnce() {
 }
 
 /**
- * Starts a new game and switches from the start screen to the game view.
+ * Starts the game and switches the user interface to the active game view.
  *
  * @returns {void}
  */
 function startGame() {
     audioManager.playStartButtonSound();
+
     hideStartScreen();
     showGameTitle();
     showMobileControls();
     init();
-    setTimeout(playGameMusic, 250);
+
+    setTimeout(() => {
+        audioManager.playGameMusic();
+    }, 250);
 }
 
 /**
- * Starts the background music for the active game.
- *
- * @returns {void}
- */
-function playGameMusic() {
-    audioManager.playGameMusic();
-}
-
-/**
- * Displays the controls intended for mobile and touch devices.
+ * Displays the mobile control buttons.
  *
  * @returns {void}
  */
@@ -57,7 +52,7 @@ function showMobileControls() {
 }
 
 /**
- * Hides the controls intended for mobile and touch devices.
+ * Hides the mobile control buttons.
  *
  * @returns {void}
  */
@@ -66,7 +61,7 @@ function hideMobileControls() {
 }
 
 /**
- * Hides the game's start screen.
+ * Hides the start screen.
  *
  * @returns {void}
  */
@@ -75,7 +70,7 @@ function hideStartScreen() {
 }
 
 /**
- * Displays the title above the active game.
+ * Displays the game title.
  *
  * @returns {void}
  */
@@ -91,131 +86,115 @@ function showGameTitle() {
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
+
     console.log('My Character:', world.character);
 }
 
 /**
- * Plays the button sound and reloads the page to restart the game.
+ * Plays the start-button sound and reloads the page to restart the game.
  *
  * @returns {void}
  */
 function restartGame() {
     audioManager.playStartButtonSound();
-    setTimeout(reloadGame, 250);
+
+    setTimeout(() => {
+        audioManager.stopAllMusic();
+        location.reload();
+    }, 250);
 }
 
 /**
- * Stops all music and reloads the current page.
+ * Updates the keyboard state when a supported key is pressed.
  *
+ * @param {KeyboardEvent} e - The keyboard event.
  * @returns {void}
  */
-function reloadGame() {
-    audioManager.stopAllMusic();
-    location.reload();
-}
-
-/**
- * Marks the keyboard control matching a pressed key as active.
- *
- * @param {KeyboardEvent} event - The keydown event triggered by the browser.
- * @returns {void}
- */
-function handleKeyDown(event) {
-    setKeyboardState(event.code, true);
-}
-
-/**
- * Marks the keyboard control matching a released key as inactive.
- *
- * @param {KeyboardEvent} event - The keyup event triggered by the browser.
- * @returns {void}
- */
-function handleKeyUp(event) {
-    setKeyboardState(event.code, false);
-}
-
-/**
- * Updates a game-control property for a supported keyboard code.
- *
- * @param {string} code - The physical keyboard code to process.
- * @param {boolean} isPressed - Whether the corresponding key is pressed.
- * @returns {void}
- */
-function setKeyboardState(code, isPressed) {
-    const keyMap = {
-        ArrowRight: 'RIGHT',
-        ArrowLeft: 'LEFT',
-        ArrowUp: 'UP',
-        ArrowDown: 'DOWN',
-        Space: 'SPACE',
-        KeyD: 'D'
-    };
-
-    const key = keyMap[code];
-
-    if (key) {
-        keyboard[key] = isPressed;
+window.addEventListener("keydown", (e) => {
+    if (e.code === "ArrowRight") {
+        keyboard.RIGHT = true;
     }
-}
 
-window.addEventListener('keydown', handleKeyDown);
-window.addEventListener('keyup', handleKeyUp);
+    if (e.code === "ArrowLeft") {
+        keyboard.LEFT = true;
+    }
+
+    if (e.code === "ArrowUp") {
+        keyboard.UP = true;
+    }
+
+    if (e.code === "ArrowDown") {
+        keyboard.DOWN = true;
+    }
+
+    if (e.code === "Space") {
+        keyboard.SPACE = true;
+    }
+
+    if (e.code === "KeyD") {
+        keyboard.D = true;
+    }
+});
 
 /**
- * Connects a touch button with a property of the shared keyboard state.
+ * Updates the keyboard state when a supported key is released.
  *
- * @param {string} buttonId - The HTML id of the touch-control button.
+ * @param {KeyboardEvent} e - The keyboard event.
+ * @returns {void}
+ */
+window.addEventListener("keyup", (e) => {
+    if (e.code === "ArrowRight") {
+        keyboard.RIGHT = false;
+    }
+
+    if (e.code === "ArrowLeft") {
+        keyboard.LEFT = false;
+    }
+
+    if (e.code === "ArrowUp") {
+        keyboard.UP = false;
+    }
+
+    if (e.code === "ArrowDown") {
+        keyboard.DOWN = false;
+    }
+
+    if (e.code === "Space") {
+        keyboard.SPACE = false;
+    }
+
+    if (e.code === "KeyD") {
+        keyboard.D = false;
+    }
+});
+
+/**
+ * Connects a touch button to a keyboard-state property.
+ *
+ * @param {string} buttonId - The ID of the touch-control button.
  * @param {string} key - The keyboard-state property controlled by the button.
  * @returns {void}
  */
 function bindTouchButton(buttonId, key) {
-    const button = document.getElementById(buttonId);
+    let button = document.getElementById(buttonId);
 
     if (!button) {
         return;
     }
 
-    button.dataset.controlKey = key;
-    button.addEventListener('touchstart', handleTouchStart);
-    button.addEventListener('touchend', handleTouchEnd);
+    button.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard[key] = true;
+    });
+
+    button.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard[key] = false;
+    });
 }
 
 /**
- * Activates the control assigned to a touched mobile button.
- *
- * @param {TouchEvent} event - The touchstart event triggered by the button.
- * @returns {void}
- */
-function handleTouchStart(event) {
-    updateTouchKey(event, true);
-}
-
-/**
- * Deactivates the control assigned to a released mobile button.
- *
- * @param {TouchEvent} event - The touchend event triggered by the button.
- * @returns {void}
- */
-function handleTouchEnd(event) {
-    updateTouchKey(event, false);
-}
-
-/**
- * Updates the keyboard state associated with a touch-control button.
- *
- * @param {TouchEvent} event - The touch event triggered by the control button.
- * @param {boolean} isPressed - Whether the touch control is currently pressed.
- * @returns {void}
- */
-function updateTouchKey(event, isPressed) {
-    event.preventDefault();
-
-    const key = event.currentTarget.dataset.controlKey;
-    keyboard[key] = isPressed;
-}
-
-/**
- * Binds all mobile control buttons to their corresponding game controls.
+ * Binds all mobile touch buttons to their corresponding controls.
  *
  * @returns {void}
  */

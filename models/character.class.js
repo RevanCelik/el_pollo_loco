@@ -1,3 +1,8 @@
+/**
+ * Represents the playable character.
+ *
+ * @extends MovableObject
+ */
 class Character extends MovableObject {
     height = 300;
     width = 150;
@@ -54,6 +59,9 @@ class Character extends MovableObject {
 
     world;
 
+    /**
+     * Creates the character, loads its images, applies gravity, and starts animation.
+     */
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
         this.loadImages(this.IMAGES_WALKING);
@@ -64,6 +72,11 @@ class Character extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Starts the character movement and animation intervals.
+     *
+     * @returns {void}
+     */
     animate() {
 
         setInterval(() => {
@@ -108,6 +121,11 @@ class Character extends MovableObject {
         }, 100);
     }
 
+    /**
+     * Advances the character's death animation by one image.
+     *
+     * @returns {void}
+     */
     playDeadAnimation() {
         if (this.deadImageIndex < this.IMAGES_DEAD.length) {
             let path = this.IMAGES_DEAD[this.deadImageIndex];
@@ -120,10 +138,20 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Increases the character's collected coin value.
+     *
+     * @returns {void}
+     */
     collectCoin() {
         this.coins += 20;
     }
 
+    /**
+     * Increases the character's collected bottle value.
+     *
+     * @returns {void}
+     */
     collectBottle() {
         this.bottles += 20;
     }

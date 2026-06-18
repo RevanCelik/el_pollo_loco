@@ -1,3 +1,8 @@
+/**
+ * Represents the final boss enemy in the game.
+ *
+ * @extends MovableObject
+ */
 class Endboss extends MovableObject {
 
     height = 500;
@@ -63,6 +68,9 @@ class Endboss extends MovableObject {
 
     deadAnimationCounter = 0;
 
+    /**
+     * Creates the endboss and loads all required animation images.
+     */
     constructor() {
         super().loadImage(this.IMAGES_ALERT[0]);
 
@@ -74,15 +82,30 @@ class Endboss extends MovableObject {
         this.x = 2200;
     }
 
+    /**
+     * Starts the endboss animation logic.
+     *
+     * @returns {void}
+     */
     startAnimation() {
         this.animate();
     }
 
+    /**
+     * Starts the movement and animation intervals of the endboss.
+     *
+     * @returns {void}
+     */
     animate() {
         this.startMovementInterval();
         this.startAnimationInterval();
     }
 
+    /**
+     * Starts the interval responsible for the endboss movement.
+     *
+     * @returns {void}
+     */
     startMovementInterval() {
         setInterval(() => {
             if (!this.canAct()) {
@@ -95,6 +118,11 @@ class Endboss extends MovableObject {
         }, 1000 / 60);
     }
 
+    /**
+     * Starts the interval responsible for updating the endboss animation.
+     *
+     * @returns {void}
+     */
     startAnimationInterval() {
         setInterval(() => {
             if (!this.canAct()) {
@@ -105,12 +133,22 @@ class Endboss extends MovableObject {
         }, 120);
     }
 
+    /**
+     * Checks whether the endboss is currently allowed to act.
+     *
+     * @returns {boolean} True if the endboss can act, otherwise false.
+     */
     canAct() {
         return this.world &&
             !this.world.character.isDead() &&
             !this.isDeadAnimationPlayed;
     }
 
+    /**
+     * Handles the current state of the endboss.
+     *
+     * @returns {void}
+     */
     handleBossState() {
         if (!this.hasSeenPlayer) {
             this.checkIfPlayerIsNear();
@@ -120,6 +158,11 @@ class Endboss extends MovableObject {
         this.playBossAnimation();
     }
 
+    /**
+     * Checks whether the player is close enough to trigger the endboss.
+     *
+     * @returns {void}
+     */
     checkIfPlayerIsNear() {
         if (!this.world) {
             return;
@@ -132,6 +175,11 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Starts the alert animation and plays the endboss intro sound.
+     *
+     * @returns {void}
+     */
     startAlertAnimation() {
         this.hasSeenPlayer = true;
         this.currentAnimation = 'alert';
@@ -139,17 +187,32 @@ class Endboss extends MovableObject {
         audioManager.playEndbossIntroSound();
     }
 
+    /**
+     * Starts the hurt animation.
+     *
+     * @returns {void}
+     */
     startHurtAnimation() {
         this.currentAnimation = 'hurt';
         this.currentImage = 0;
     }
 
+    /**
+     * Starts the death animation and sets the endboss energy to zero.
+     *
+     * @returns {void}
+     */
     startDeadAnimation() {
         this.energy = 0;
         this.currentAnimation = 'dead';
         this.currentImage = 0;
     }
 
+    /**
+     * Plays the animation matching the current endboss state.
+     *
+     * @returns {void}
+     */
     playBossAnimation() {
         if (this.currentAnimation === 'alert') {
             this.playAnimationOnce(this.IMAGES_ALERT, 'walking');
@@ -164,6 +227,13 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Plays one animation sequence and switches to the next animation.
+     *
+     * @param {string[]} images - The image paths of the animation.
+     * @param {string} nextAnimation - The animation state to activate afterward.
+     * @returns {void}
+     */
     playAnimationOnce(images, nextAnimation) {
         let path = images[this.currentImage];
         this.img = this.imageCache[path];
@@ -175,6 +245,11 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Controls the timing of the endboss death animation.
+     *
+     * @returns {void}
+     */
     playDeadAnimation() {
         this.deadAnimationCounter++;
 
@@ -186,6 +261,11 @@ class Endboss extends MovableObject {
         this.showNextDeadImage();
     }
 
+    /**
+     * Displays the next image of the death animation.
+     *
+     * @returns {void}
+     */
     showNextDeadImage() {
         let path = this.IMAGES_DEAD[this.currentImage];
         this.img = this.imageCache[path];
@@ -197,6 +277,11 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Reduces the endboss energy after being hit by a bottle.
+     *
+     * @returns {void}
+     */
     hitByBottle() {
         if (this.energy <= 0) {
             return;

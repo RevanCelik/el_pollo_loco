@@ -1,3 +1,8 @@
+/**
+ * Represents a collectible animated coin.
+ *
+ * @extends MovableObject
+ */
 class Coin extends MovableObject {
     width = 150;
     height = 150;
@@ -18,6 +23,12 @@ class Coin extends MovableObject {
     imageCache = [];
     currentImage = 0;
 
+    /**
+     * Creates a coin at the specified position and starts its animation.
+     *
+     * @param {number} x - The horizontal position.
+     * @param {number} y - The vertical position.
+     */
     constructor(x, y) {
         super();
         this.loadImage('img/8_coin/coin_1.png');
@@ -27,11 +38,23 @@ class Coin extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Loads a single image into the coin's image element.
+     *
+     * @param {string} path - The path to the image.
+     * @returns {void}
+     */
     loadImage(path) {
         this.img.src = path;
 
     }
 
+    /**
+     * Loads multiple images into the image cache.
+     *
+     * @param {string[]} arr - The image paths to load.
+     * @returns {void}
+     */
     loadImages(arr) {
         arr.forEach((path) => {
             let img = new Image();
@@ -40,6 +63,11 @@ class Coin extends MovableObject {
         });
     }
 
+    /**
+     * Starts the looping coin animation.
+     *
+     * @returns {void}
+     */
     animate() {
 
         setInterval(() => {
