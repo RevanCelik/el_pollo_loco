@@ -1,42 +1,47 @@
-/*--Smartphone responsiveness--*/
+/* Smartphone portrait mode */
 
-@media only screen and (max-width: 720px) {
-    canvas {
-        width: 100%;
+@media only screen and (max-width: 900px) and (orientation: portrait) {
+    .orientation-warning {
+        display: flex;
+    }
+}
+
+
+/* Smartphone landscape mode */
+
+@media only screen and (max-width: 900px) and (orientation: landscape) {
+    body {
+        min-height: 100dvh;
     }
 
-    .mobile-controls {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 16px;
-
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        padding: 0 24px;
-        box-sizing: border-box;
-
-        z-index: 30;
-        pointer-events: none;
+    h1 {
+        display: none;
     }
 
-    .mobile-controls-left,
-    .mobile-controls-right {
+    .orientation-warning {
+        display: none;
+    }
+
+    .game-container {
+        width: min(100vw, calc(100dvh * 1.5), 720px);
+    }
+
+    .mobile-controls:not(.hidden) {
         display: flex;
-        gap: 16px;
-        pointer-events: auto;
     }
 
     .controls-info {
-        font-size: 14px;
-        gap: 12px;
-        flex-wrap: wrap;
-        padding: 0 12px;
-        text-align: center;
+        display: none;
+    }
+
+    .sound-controls {
+        top: 8px;
+        right: 8px;
     }
 }
+
+
+/* Small landscape screens */
 
 @media only screen and (max-height: 480px) {
     h1 {
@@ -44,7 +49,7 @@
     }
 
     .game-container {
-        width: min(100vw, calc(100vh * 1.5), 720px);
+        width: min(100vw, calc(100dvh * 1.5), 720px);
     }
 
     .controls-info {

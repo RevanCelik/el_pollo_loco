@@ -202,3 +202,20 @@ function bindTouchControls() {
     bindTouchButton('btnSpace', 'SPACE');
     bindTouchButton('btnD', 'D');
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    disableMobileButtonContextMenu();
+});
+
+function disableMobileButtonContextMenu() {
+    const mobileButtons = document.querySelectorAll('.mobile-btn');
+
+    mobileButtons.forEach((button) => {
+        button.addEventListener('contextmenu', preventDefaultAction);
+        button.addEventListener('dragstart', preventDefaultAction);
+    });
+}
+
+function preventDefaultAction(event) {
+    event.preventDefault();
+}

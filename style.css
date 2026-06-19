@@ -309,6 +309,10 @@ canvas {
     user-select: none;
     touch-action: none;
 
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+
     opacity: 0.75;
 }
 
@@ -332,4 +336,65 @@ canvas {
     padding: 8px 14px;
     border-radius: 10px;
     font-size: 22px;
+}
+
+.orientation-warning {
+    position: fixed;
+    inset: 0;
+
+    display: none;
+    justify-content: center;
+    align-items: center;
+
+    padding: 24px;
+    box-sizing: border-box;
+
+    background-image: url('img/desert2.png');
+    background-size: cover;
+    background-position: center;
+
+    z-index: 100000;
+}
+
+.orientation-warning-content {
+    max-width: 420px;
+    padding: 24px;
+
+    border: 3px solid #5a2e0c;
+    border-radius: 18px;
+
+    background-color: rgba(246, 178, 60, 0.95);
+    color: #3b1f08;
+
+    text-align: center;
+    box-shadow: 5px 5px 0 #3b1f08;
+}
+
+.orientation-warning h2 {
+    margin: 12px 0;
+    font-size: clamp(24px, 8vw, 40px);
+}
+
+.orientation-warning p {
+    margin: 0;
+    font-size: clamp(16px, 5vw, 22px);
+}
+
+.orientation-icon {
+    display: block;
+    font-size: 64px;
+    line-height: 1;
+    animation: rotate-device 1.8s ease-in-out infinite;
+}
+
+@keyframes rotate-device {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(90deg);
+    }
 }
