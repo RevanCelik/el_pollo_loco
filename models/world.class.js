@@ -4,6 +4,7 @@ class World {
     canvas;
     ctx;
     keyboard;
+    renderer;
     camera_x = 0;
     statusBar = new StatusbarHealth();
     coinBar = new StatusbarCoin();
@@ -26,8 +27,9 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.renderer = new WorldRenderer(this);
 
-        this.draw();
+        this.renderer.draw();
         this.setWorld();
         this.startEnemies();
         this.run();
@@ -360,59 +362,6 @@ class World {
         }, 2500);
     }
 
-
-    /**
-     * Draws all visible objects and interface elements on the canvas.
-     *
-     * @returns {void}
-     */
-    draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-        this.ctx.translate(this.camera_x, 0);
-
-        this.addObjectToMap(this.level.backgroundObjects);
-
-        this.ctx.translate(-this.camera_x, 0);
-        this.addToMap(this.statusBar);
-        this.addToMap(this.coinBar);
-        this.addToMap(this.bottleBar);
-        this.ctx.translate(this.camera_x, 0);
-
-        this.addToMap(this.character);
-        this.addObjectToMap(this.level.clouds);
-        this.addObjectToMap(this.level.coins);
-        this.addObjectToMap(this.level.bottles);
-        this.addObjectToMap(this.level.enemies);
-        this.addEndbossBar();
-        this.addObjectToMap(this.throwableObjects);
-
-        this.ctx.translate(-this.camera_x, 0);
-
-        if (this.character.isDead()) {
-            this.startGameOverSequence();
-        }
-
-        requestAnimationFrame(() => this.draw());
-    }
-
-    /**
-     * Draws the endboss status bar above the active endboss.
-     *
-     * @returns {void}
-     */
-    addEndbossBar() {
-        let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
-
-        if (!endboss || endboss.isDead()) {
-            return;
-        }
-
-        this.endbossBar.x = endboss.x + endboss.width / 2 - this.endbossBar.width / 2;
-        this.endbossBar.y = Math.max(endboss.y + 30, 20);
-        this.addToMap(this.endbossBar);
-    }
-
     /**
      * Displays the game-over screen once.
      *
@@ -437,61 +386,5 @@ class World {
         document.getElementById('gameOverOverlay').classList.remove('hidden');
         document.getElementById('gameTitle').classList.add('hidden');
         hideMobileControls();
-    }
-
-    /**
-     * Adds all objects from an array to the canvas.
-     *
-     * @param {DrawableObject[]} objects - The objects to draw.
-     * @returns {void}
-     */
-    addObjectToMap(objects) {
-        objects.forEach(o => {
-            this.addToMap(o);
-        });
-    }
-
-    /**
-     * Draws a single object on the canvas and handles its direction.
-     *
-     * @param {DrawableObject} mo - The object to draw.
-     * @returns {void}
-     */
-    addToMap(mo) {
-        if (mo.otherDirection) {
-            this.flipImage(mo);
-
-        }
-        mo.draw(this.ctx);
-        mo.drawFrame(this.ctx);
-
-
-        if (mo.otherDirection) {
-            this.flipImageBack(mo);
-        }
-    }
-
-    /**
-     * Flips an object's image horizontally before drawing.
-     *
-     * @param {DrawableObject} mo - The object whose image should be flipped.
-     * @returns {void}
-     */
-    flipImage(mo) {
-        this.ctx.save();
-        this.ctx.translate(mo.width, 0);
-        this.ctx.scale(-1, 1);
-        mo.x = mo.x * -1;
-    }
-
-    /**
-     * Restores an object's position and the canvas state after flipping.
-     *
-     * @param {DrawableObject} mo - The previously flipped object.
-     * @returns {void}
-     */
-    flipImageBack(mo) {
-        mo.x = mo.x * -1;
-        this.ctx.restore();
     }
 }
