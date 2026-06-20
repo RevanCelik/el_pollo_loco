@@ -12,9 +12,9 @@ class Endboss extends MovableObject {
 
     offset = {
         top: 120,
-        left: 60,
+        left: 75,
         right: 60,
-        bottom: 40
+        bottom: 100
     };
 
     IMAGES_ALERT = [

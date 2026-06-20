@@ -35,8 +35,36 @@
     }
 
     .sound-controls {
-        top: 8px;
-        right: 8px;
+        top: 6px;
+        right: 6px;
+        gap: 5px;
+    }
+
+    .sound-controls button:not(.fullscreen-button) {
+        width: 68px;
+        height: 28px;
+        padding: 2px 5px;
+        font-size: 10px;
+    }
+
+    .sound-controls button.fullscreen-button {
+        width: 28px;
+        min-width: 28px;
+        height: 28px;
+        padding: 0;
+        font-size: 14px;
+    }
+
+    .game-over-overlay,
+    .winner-overlay {
+        padding-bottom: 32px;
+    }
+
+    .game-over-overlay .result-button,
+    .winner-overlay .result-button {
+        width: min(45%, 320px);
+        font-size: 18px;
+        padding: 8px 18px;
     }
 }
 
@@ -67,5 +95,18 @@
     .impressum-card .menu-button {
         font-size: 16px;
         padding: 8px 16px;
+    }
+}
+
+/* Touch devices and tablet emulation */
+
+@media (hover: none) and (pointer: coarse),
+(min-width: 901px) and (max-width: 1366px) and (orientation: landscape) {
+    .mobile-controls:not(.hidden) {
+        display: flex;
+    }
+
+    .controls-info {
+        display: none;
     }
 }

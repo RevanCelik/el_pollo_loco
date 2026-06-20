@@ -94,6 +94,8 @@ class WorldBase {
         clearInterval(this.gameInterval);
         this.gameInterval = null;
         this.isRunning = false;
+
         audioManager.stopFootstepLoop();
+        audioManager.stopCharacterSnoringSound();
     }
 }

@@ -240,6 +240,7 @@ class World extends WorldBase {
         }
 
         this.winnerShown = true;
+        audioManager.stopCharacterSnoringSound();
         audioManager.stopFootstepLoop();
         audioManager.playEndbossDefeatedSound();
 
@@ -266,9 +267,12 @@ class World extends WorldBase {
      * @returns {void}
      */
     startGameOverSequence() {
-        if (this.gameOverStarted) return;
+        if (this.gameOverStarted) {
+            return;
+        }
 
         this.gameOverStarted = true;
+        audioManager.stopCharacterSnoringSound();
         audioManager.stopFootstepLoop();
         audioManager.stopGameMusic();
         audioManager.playGameOverSound();

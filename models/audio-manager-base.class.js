@@ -7,6 +7,7 @@ class AudioManagerBase {
 
     startButtonSound = new Audio('audio/button_start_select.wav');
     gameOverSound = new Audio('audio/character_dead.wav');
+    characterSnoringSound = new Audio('audio/character_snoring.wav');
     characterHurtSound = new Audio('audio/character_hurt.wav');
     chickenDeadSound = new Audio('audio/chicken_dead.wav');
 
@@ -29,6 +30,7 @@ class AudioManagerBase {
     endbossDefeatedSound = new Audio('audio/endboss_defeated.wav');
     isEndbossIntroSoundPlayed = false;
 
+    isCharacterSnoring = false;
     isCharacterHurtSoundPlaying = false;
     isGameOverSoundPlaying = false;
 
@@ -52,6 +54,9 @@ class AudioManagerBase {
         this.gameOverSound.volume = 0.6;
         this.characterHurtSound.volume = 0.55;
         this.chickenDeadSound.volume = 0.55;
+
+        this.characterSnoringSound.loop = true;
+        this.characterSnoringSound.volume = 0.35;
 
         this.characterJumpSound.volume = 0.55;
 
@@ -199,6 +204,7 @@ class AudioManagerBase {
             this.gameOverSound,
             this.characterHurtSound,
             this.characterJumpSound,
+            this.characterSnoringSound,
             this.chickenDeadSound,
             this.bottleThrowSound,
             this.bottleBreakSound,

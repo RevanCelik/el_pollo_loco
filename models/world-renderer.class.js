@@ -120,7 +120,8 @@ class WorldRenderer {
             endboss.width / 2 -
             world.endbossBar.width / 2;
 
-        world.endbossBar.y = Math.max(endboss.y + 30, 20);
+        let minimumY = window.innerWidth <= 900 ? 55 : 20;
+        world.endbossBar.y = Math.max(endboss.y + 30, minimumY);
         this.addToMap(world.endbossBar);
     }
 
@@ -148,7 +149,7 @@ class WorldRenderer {
         }
 
         movableObject.draw(this.world.ctx);
-        movableObject.drawFrame(this.world.ctx);
+        
 
         if (movableObject.otherDirection) {
             this.flipImageBack(movableObject);

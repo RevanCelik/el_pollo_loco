@@ -68,6 +68,41 @@ class AudioManager extends AudioManagerBase {
     }
 
     /**
+     * Starts the looping character-snoring sound.
+     *
+     * @returns {void}
+     */
+    playCharacterSnoringSound() {
+        if (this.sfxMuted || this.isCharacterSnoring) {
+            return;
+        }
+
+        this.isCharacterSnoring = true;
+        this.characterSnoringSound.currentTime = 0;
+
+        this.characterSnoringSound.play().catch(error => {
+            if (error.name !== 'AbortError') {
+                console.error(error);
+            }
+        });
+    }
+
+    /**
+     * Stops and resets the character-snoring sound.
+     *
+     * @returns {void}
+     */
+    stopCharacterSnoringSound() {
+        if (!this.isCharacterSnoring && this.characterSnoringSound.paused) {
+            return;
+        }
+
+        this.isCharacterSnoring = false;
+        this.characterSnoringSound.pause();
+        this.characterSnoringSound.currentTime = 0;
+    }
+
+    /**
      * Plays the character-hurt sound when no conflicting sound is active.
      *
      * @param {boolean} characterIsDead - Whether the character is dead.
