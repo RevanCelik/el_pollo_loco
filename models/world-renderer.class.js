@@ -16,6 +16,10 @@ class WorldRenderer {
      * @returns {void}
      */
     draw() {
+        if (!this.world.isRunning) {
+            return;
+        }
+
         this.clearCanvas();
         this.drawWorldObjects();
         this.drawFixedStatusBars();

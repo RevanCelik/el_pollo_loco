@@ -89,7 +89,7 @@ function init() {
 }
 
 /**
- * Plays the start-button sound and reloads the page to restart the game.
+ * Restarts the game without reloading the page.
  *
  * @returns {void}
  */
@@ -97,9 +97,47 @@ function restartGame() {
     audioManager.playStartButtonSound();
 
     setTimeout(() => {
-        audioManager.stopAllMusic();
-        location.reload();
+        stopCurrentWorld();
+        resetGameOverlays();
+        resetGameState();
+        init();
+        showGameTitle();
+        showMobileControls();
+        audioManager.playGameMusic();
     }, 250);
+}
+
+/**
+ * Stops the currently active game world.
+ *
+ * @returns {void}
+ */
+function stopCurrentWorld() {
+    if (world) {
+        world.stop();
+    }
+}
+
+/**
+ * Hides the winner and game-over overlays.
+ *
+ * @returns {void}
+ */
+function resetGameOverlays() {
+    document.getElementById('gameOverOverlay').classList.add('hidden');
+    document.getElementById('winnerOverlay').classList.add('hidden');
+}
+
+/**
+ * Recreates the level, keyboard state, and audio manager.
+ *
+ * @returns {void}
+ */
+function resetGameState() {
+    audioManager.stopAllMusic();
+    level1 = createLevel1();
+    keyboard = new Keyboard();
+    audioManager = new AudioManager();
 }
 
 /**
