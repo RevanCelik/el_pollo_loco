@@ -115,6 +115,7 @@ function restartGame() {
 function stopCurrentWorld() {
     if (world) {
         world.stop();
+        world = null;
     }
 }
 
@@ -134,10 +135,42 @@ function resetGameOverlays() {
  * @returns {void}
  */
 function resetGameState() {
-    audioManager.stopAllMusic();
+    audioManager.reset();
     level1 = createLevel1();
     keyboard = new Keyboard();
-    audioManager = new AudioManager();
+}
+
+/**
+ * Stops the current game and returns to the main menu.
+ *
+ * @returns {void}
+ */
+function backToMainMenu() {
+    stopCurrentWorld();
+    resetGameState();
+    resetGameOverlays();
+    hideMobileControls();
+    hideGameTitle();
+    showStartScreen();
+    audioManager.playStartScreenMusic();
+}
+
+/**
+ * Hides the game title.
+ *
+ * @returns {void}
+ */
+function hideGameTitle() {
+    document.getElementById('gameTitle').classList.add('hidden');
+}
+
+/**
+ * Displays the start screen.
+ *
+ * @returns {void}
+ */
+function showStartScreen() {
+    document.getElementById('startScreen').classList.remove('hidden');
 }
 
 /**

@@ -115,6 +115,13 @@ canvas {
     padding: clamp(6px, 1.4vw, 8px) clamp(14px, 3.5vw, 18px);
 }
 
+
+.result-button {
+    width: min(72%, 360px);
+    font-size: clamp(16px, 2.4vw, 24px);
+    padding: clamp(7px, 1.2vw, 10px) clamp(16px, 3vw, 24px);
+}
+
 .game-over-overlay,
 .winner-overlay {
     position: absolute;

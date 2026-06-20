@@ -290,4 +290,23 @@ class AudioManager extends AudioManagerBase {
         this.stopWinnerScreenMusic();
         this.stopFootstepLoop();
     }
+
+
+    /**
+     * Stops and resets every audio track and playback state.
+     *
+     * @returns {void}
+     */
+    reset() {
+        this.stopAllMusic();
+        this.getSfxTracks().forEach(sound => {
+            sound.pause();
+            sound.currentTime = 0;
+            sound.onended = null;
+        });
+        this.isEndbossIntroSoundPlayed = false;
+        this.isCharacterHurtSoundPlaying = false;
+        this.isGameOverSoundPlaying = false;
+        this.currentMusic = null;
+    }
 }
