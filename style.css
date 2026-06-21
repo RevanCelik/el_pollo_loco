@@ -240,19 +240,33 @@ canvas {
 #fullscreen:fullscreen {
     width: 100vw;
     height: 100vh;
-    background-color: black;
+
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),
+        url('img/desert2.png');
+    background-size: cover;
+    background-position: center;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
 #fullscreen:fullscreen .game-container {
-    width: 100vw;
-    max-height: 100vh;
+    width: min(100vw, calc((100vh - 70px) * 1.5));
+    max-width: 100vw;
     aspect-ratio: 720 / 480;
     height: auto;
     position: relative;
+
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.45);
+}
+
+#fullscreen:fullscreen .controls-info {
+    margin-top: 10px;
+    flex-shrink: 0;
 }
 
 #fullscreen:fullscreen canvas,
