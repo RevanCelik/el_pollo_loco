@@ -4,13 +4,14 @@ let keyboard = new Keyboard();
 let audioManager = new AudioManager();
 
 /**
- * Initializes the start screen, touch controls, and the initial music listener.
+ * Initializes the start screen, touch controls, and global input listeners.
  *
  * @returns {void}
  */
 function initStartScreen() {
     canvas = document.getElementById('canvas');
     bindTouchControls();
+    bindGameContextMenu();
     document.addEventListener('click', playStartScreenMusicOnce);
 }
 
@@ -278,6 +279,47 @@ document.addEventListener('DOMContentLoaded', () => {
     disableMobileButtonContextMenu();
 });
 
+/**
+ * Resets all active keyboard controls.
+ *
+ * @returns {void}
+ */
+function resetKeyboard() {
+    keyboard.RIGHT = false;
+    keyboard.LEFT = false;
+    keyboard.UP = false;
+    keyboard.DOWN = false;
+    keyboard.SPACE = false;
+    keyboard.D = false;
+}
+
+/**
+ * Disables the context menu inside the game area.
+ *
+ * @returns {void}
+ */
+function bindGameContextMenu() {
+    const fullscreen = document.getElementById('fullscreen');
+
+    fullscreen.addEventListener('contextmenu', (event) => {
+        event.preventDefault();
+        resetKeyboard();
+    });
+}
+
+window.addEventListener('blur', resetKeyboard);
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        resetKeyboard();
+    }
+});
+
+/**
+ * Disables the context menu and drag behavior for all mobile control buttons.
+ *
+ * @returns {void}
+ */
 function disableMobileButtonContextMenu() {
     const mobileButtons = document.querySelectorAll('.mobile-btn');
 
@@ -287,6 +329,12 @@ function disableMobileButtonContextMenu() {
     });
 }
 
+/**
+ * Prevents the browser's default behavior for the specified event.
+ *
+ * @param {Event} event - The browser event whose default action should be prevented.
+ * @returns {void}
+ */
 function preventDefaultAction(event) {
     event.preventDefault();
 }
