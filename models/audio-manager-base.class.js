@@ -33,6 +33,7 @@ class AudioManagerBase {
     isCharacterSnoring = false;
     isCharacterHurtSoundPlaying = false;
     isGameOverSoundPlaying = false;
+    winnerSequenceActive = false;
 
     musicMuted = false;
     sfxMuted = false;
@@ -95,7 +96,7 @@ class AudioManagerBase {
         }
 
         music.volume = this.musicVolume;
-        music.play();
+        this.safePlay(music);
     }
 
     /**
@@ -111,7 +112,7 @@ class AudioManagerBase {
 
         sound.currentTime = 0;
         sound.volume = this.sfxVolume;
-        sound.play();
+        this.safePlay(sound);
     }
 
     /**
@@ -175,7 +176,7 @@ class AudioManagerBase {
         this.applyVolumes();
 
         if (this.currentMusic) {
-            this.currentMusic.play();
+            this.safePlay(this.currentMusic);
         }
     }
 
@@ -215,5 +216,23 @@ class AudioManagerBase {
             this.endbossIntroSound,
             this.endbossDefeatedSound
         ].filter(sound => sound);
+    }
+
+    /**
+ * Plays an audio element and ignores expected interruption errors.
+ *
+ * @param {HTMLAudioElement} audio - The audio element to play.
+ * @returns {void}
+ */
+    safePlay(audio) {
+        const playPromise = audio.play();
+
+        if (playPromise) {
+            playPromise.catch(error => {
+                if (error.name !== 'AbortError') {
+                    console.error(error);
+                }
+            });
+        }
     }
 }

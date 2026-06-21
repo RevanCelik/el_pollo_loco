@@ -79,14 +79,9 @@ class AudioManager extends AudioManagerBase {
 
         this.isCharacterSnoring = true;
         this.characterSnoringSound.currentTime = 0;
-
-        this.characterSnoringSound.play().catch(error => {
-            if (error.name !== 'AbortError') {
-                console.error(error);
-            }
-        });
+        this.safePlay(this.characterSnoringSound);
     }
-
+    
     /**
      * Stops and resets the character-snoring sound.
      *
@@ -192,7 +187,7 @@ class AudioManager extends AudioManagerBase {
         }
 
         this.footstepLoop.currentTime = 0;
-        this.footstepLoop.play();
+        this.safePlay(this.footstepLoop);
     }
 
     /**
@@ -226,7 +221,7 @@ class AudioManager extends AudioManagerBase {
 
         this.isEndbossIntroSoundPlayed = true;
         this.endbossIntroSound.currentTime = 0;
-        this.endbossIntroSound.play();
+        this.safePlay(this.endbossIntroSound);
     }
 
     /**
@@ -246,7 +241,7 @@ class AudioManager extends AudioManagerBase {
     playWinnerSound() {
         this.stopGameMusic();
         this.winnerSound.currentTime = 0;
-        this.winnerSound.play();
+        this.safePlay(this.winnerSound);
     }
 
     /**
@@ -257,14 +252,30 @@ class AudioManager extends AudioManagerBase {
     playWinnerSoundThenScreenMusic() {
         this.stopGameMusic();
         this.stopGameOverScreenMusic();
-        this.stopWinnerScreenMusic();
+        this.stopWinnerSequence();
 
+        this.winnerSequenceActive = true;
         this.winnerSound.currentTime = 0;
-        this.winnerSound.play();
+        this.safePlay(this.winnerSound);
 
         this.winnerSound.onended = () => {
-            this.playWinnerScreenMusic();
+            if (this.winnerSequenceActive) {
+                this.playWinnerScreenMusic();
+            }
         };
+    }
+
+    /**
+ * Stops the active winner sound sequence.
+ *
+ * @returns {void}
+ */
+    stopWinnerSequence() {
+        this.winnerSequenceActive = false;
+        this.winnerSound.onended = null;
+        this.winnerSound.pause();
+        this.winnerSound.currentTime = 0;
+        this.stopWinnerScreenMusic();
     }
 
     /**
@@ -333,15 +344,21 @@ class AudioManager extends AudioManagerBase {
      * @returns {void}
      */
     reset() {
+        this.stopWinnerSequence();
+        this.stopCharacterSnoringSound();
         this.stopAllMusic();
+
         this.getSfxTracks().forEach(sound => {
             sound.pause();
             sound.currentTime = 0;
             sound.onended = null;
         });
+
+        this.isCharacterSnoring = false;
         this.isEndbossIntroSoundPlayed = false;
         this.isCharacterHurtSoundPlaying = false;
         this.isGameOverSoundPlaying = false;
         this.currentMusic = null;
     }
 }
+

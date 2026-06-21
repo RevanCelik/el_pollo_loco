@@ -15,6 +15,9 @@ class Character extends MovableObject {
     lastActionTime = Date.now();
     longIdleDelay = 15000;
 
+    movementInterval = null;
+    animationInterval = null;
+
     offset = {
         top: 120,
         left: 35,
@@ -106,51 +109,82 @@ class Character extends MovableObject {
     /**
      * Starts the character movement and animation intervals.
      *
+     * The movement interval handles horizontal movement, jumping,
+     * and camera positioning. The animation interval updates the
+     * character state, snoring sound, and currently displayed animation.
+     *
      * @returns {void}
      */
     animate() {
-
-        setInterval(() => {
-            if (this.isDead()) {
+        this.movementInterval = setInterval(() => {
+            if (!this.world || !this.world.isRunning || this.isDead()) {
                 return;
             }
 
-            if (this.world.keyboard.RIGHT && this.world.level.level_end_x > this.x) {
-                this.otherDirection = false;
-                this.moveRight();
-            }
-
-            if (this.world.keyboard.LEFT && this.x > 0) {
-                this.otherDirection = true;
-                this.moveLeft();
-            }
-
-            if ((this.world.keyboard.UP || this.world.keyboard.SPACE) && !this.isAboveGround()) {
-                audioManager.playCharacterJumpSound();
-                this.jump();
-            }
-
+            this.handleMovement();
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
 
-        setInterval(() => {
+        this.animationInterval = setInterval(() => {
+            if (!this.world || !this.world.isRunning) {
+                return;
+            }
+
             this.updateLastActionTime();
             this.updateSnoringSound();
-
-            if (this.isDead()) {
-                this.handleDeadAnimation();
-            } else if (this.isHurt()) {
-                this.playAnimation(this.IMAGES_HURT);
-            } else if (this.isAboveGround()) {
-                this.playAnimation(this.IMAGES_JUMPING);
-            } else if (this.isWalking()) {
-                this.playAnimation(this.IMAGES_WALKING);
-            } else if (this.isLongIdle()) {
-                this.playAnimation(this.IMAGES_LONG_IDLE);
-            } else {
-                this.playAnimation(this.IMAGES_IDLE);
-            }
+            this.playCurrentAnimation();
         }, 100);
+    }
+
+    /**
+     * Handles the character's horizontal movement and jumping input.
+     *
+     * The character can move right until the end of the level,
+     * move left until reaching the beginning of the level,
+     * and jump while standing on the ground.
+     *
+     * @returns {void}
+     */
+    handleMovement() {
+        if (this.world.keyboard.RIGHT && this.world.level.level_end_x > this.x) {
+            this.otherDirection = false;
+            this.moveRight();
+        }
+
+        if (this.world.keyboard.LEFT && this.x > 0) {
+            this.otherDirection = true;
+            this.moveLeft();
+        }
+
+        if ((this.world.keyboard.UP || this.world.keyboard.SPACE) &&
+            !this.isAboveGround()) {
+            audioManager.playCharacterJumpSound();
+            this.jump();
+        }
+    }
+
+    /**
+     * Plays the animation matching the character's current state.
+     *
+     * Animation priority:
+     * dead, hurt, jumping, walking, long idle, and idle.
+     *
+     * @returns {void}
+     */
+    playCurrentAnimation() {
+        if (this.isDead()) {
+            this.handleDeadAnimation();
+        } else if (this.isHurt()) {
+            this.playAnimation(this.IMAGES_HURT);
+        } else if (this.isAboveGround()) {
+            this.playAnimation(this.IMAGES_JUMPING);
+        } else if (this.isWalking()) {
+            this.playAnimation(this.IMAGES_WALKING);
+        } else if (this.isLongIdle()) {
+            this.playAnimation(this.IMAGES_LONG_IDLE);
+        } else {
+            this.playAnimation(this.IMAGES_IDLE);
+        }
     }
 
     /**
@@ -254,6 +288,22 @@ class Character extends MovableObject {
             !this.isHurt() &&
             !this.isAboveGround() &&
             !this.isWalking();
+    }
+
+    /**
+ * Stops all character intervals and active character sounds.
+ *
+ * @returns {void}
+ */
+    stop() {
+        clearInterval(this.movementInterval);
+        clearInterval(this.animationInterval);
+
+        this.movementInterval = null;
+        this.animationInterval = null;
+
+        audioManager.stopCharacterSnoringSound();
+        audioManager.stopFootstepLoop();
     }
 
     /**
