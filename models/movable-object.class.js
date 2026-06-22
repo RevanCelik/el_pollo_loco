@@ -18,7 +18,24 @@ class MovableObject extends DrawableObject {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
             }
+
+            this.correctGroundPosition();
         }, 1000 / 25);
+    }
+
+    /**
+     * Corrects the object's vertical position after landing.
+     *
+     * Non-throwable objects are placed exactly on the ground and their
+     * vertical speed is reset when they move below the ground position.
+     *
+     * @returns {void}
+     */
+    correctGroundPosition() {
+        if (!(this instanceof ThrowableObject) && this.y > 130) {
+            this.y = 130;
+            this.speedY = 0;
+        }
     }
 
     /**

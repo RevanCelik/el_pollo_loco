@@ -168,6 +168,11 @@
     opacity: 0.75;
 }
 
+#btnLeft,
+#btnRight {
+    padding-bottom: 6px;
+}
+
 .mobile-btn:active {
     transform: scale(0.94);
     background-color: rgba(0, 0, 0, 0.75);
@@ -188,6 +193,14 @@
     padding: 8px 14px;
     border-radius: 10px;
     font-size: 22px;
+}
+
+.salsa-bottle-icon {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
 }
 
 .orientation-warning {

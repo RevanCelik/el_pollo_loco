@@ -15,26 +15,40 @@ toggleButton.addEventListener('click', () => {
 });
 
 /**
- * Toggles the music state and updates the music button text.
+ * Toggles the music state and updates the audio buttons.
  *
  * @returns {void}
  */
 function toggleMusic() {
     audioManager.toggleMusic();
-
-    let button = document.getElementById('musicButton');
-    button.innerText = audioManager.musicMuted ? 'Music: OFF' : 'Music: ON';
+    updateAudioButtons();
 }
 
 /**
- * Toggles the sound-effect state and updates the SFX button text.
+ * Toggles the sound-effect state and updates the audio buttons.
  *
  * @returns {void}
  */
 function toggleSfx() {
     audioManager.toggleSfx();
-
-    let button = document.getElementById('sfxButton');
-    button.innerText = audioManager.sfxMuted ? 'SFX: OFF' : 'SFX: ON';
+    updateAudioButtons();
 }
+
+/**
+ * Updates the audio button labels using the current settings.
+ *
+ * @returns {void}
+ */
+function updateAudioButtons() {
+    let musicButton = document.getElementById('musicButton');
+    let sfxButton = document.getElementById('sfxButton');
+
+    musicButton.innerText =
+        audioManager.musicMuted ? 'Music: OFF' : 'Music: ON';
+
+    sfxButton.innerText =
+        audioManager.sfxMuted ? 'SFX: OFF' : 'SFX: ON';
+}
+
+document.addEventListener('DOMContentLoaded', updateAudioButtons);
 

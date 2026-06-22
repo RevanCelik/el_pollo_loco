@@ -35,8 +35,8 @@ class AudioManagerBase {
     isGameOverSoundPlaying = false;
     winnerSequenceActive = false;
 
-    musicMuted = false;
-    sfxMuted = false;
+    musicMuted = localStorage.getItem('musicMuted') === 'true';
+    sfxMuted = localStorage.getItem('sfxMuted') === 'true';
     musicVolume = 0.4;
     sfxVolume = 0.8;
     currentMusic = null;
@@ -116,12 +116,13 @@ class AudioManagerBase {
     }
 
     /**
-     * Toggles music muting and pauses or resumes the current track.
+     * Toggles music muting, stores the setting, and updates playback.
      *
      * @returns {void}
      */
     toggleMusic() {
         this.musicMuted = !this.musicMuted;
+        this.saveAudioSettings();
 
         if (this.musicMuted) {
             this.pauseAllMusic();
@@ -132,13 +133,24 @@ class AudioManagerBase {
     }
 
     /**
-     * Toggles sound-effect muting and reapplies audio volumes.
+     * Toggles sound-effect muting and stores the setting.
      *
      * @returns {void}
      */
     toggleSfx() {
         this.sfxMuted = !this.sfxMuted;
+        this.saveAudioSettings();
         this.applyVolumes();
+    }
+
+    /**
+ * Stores the current music and sound-effect settings.
+ *
+ * @returns {void}
+ */
+    saveAudioSettings() {
+        localStorage.setItem('musicMuted', this.musicMuted);
+        localStorage.setItem('sfxMuted', this.sfxMuted);
     }
 
     /**

@@ -98,6 +98,35 @@
     }
 }
 
+/* Very small landscape screens, e.g. iPhone SE */
+
+@media only screen and (max-height: 400px) and (orientation: landscape) {
+
+    .game-over-overlay,
+    .winner-overlay {
+        gap: 7px;
+        padding-bottom: 10px;
+    }
+
+    .game-over-overlay .result-button,
+    .winner-overlay .result-button {
+        width: min(42%, 280px);
+        padding: 5px 12px;
+        font-size: 14px;
+        line-height: 1.1;
+        border-width: 2px;
+        border-radius: 12px;
+    }
+
+    .game-over-overlay .small-button,
+    .winner-overlay .small-button {
+        padding: 4px 10px;
+        font-size: 11px;
+        border-width: 2px;
+        border-radius: 10px;
+    }
+}
+
 /* Touch devices and tablet emulation */
 
 @media (hover: none) and (pointer: coarse),
@@ -108,5 +137,62 @@
 
     .controls-info {
         display: none;
+    }
+}
+
+/* Wide screens with limited height */
+
+@media only screen and (max-height: 650px) and (orientation: landscape) {
+    body {
+        min-height: 100dvh;
+    }
+
+    h1 {
+        display: none;
+    }
+
+    .game-container {
+        width: min(100vw,
+                calc((100dvh - 50px) * 1.5),
+                720px);
+    }
+
+    .controls-info {
+        display: none;
+    }
+
+    .sound-controls {
+        top: 6px;
+        right: 6px;
+        gap: 5px;
+    }
+
+    .sound-controls button:not(.fullscreen-button) {
+        width: 68px;
+        height: 28px;
+        padding: 2px 5px;
+        font-size: 10px;
+    }
+
+    .sound-controls button.fullscreen-button {
+        width: 28px;
+        min-width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+
+    .start-screen {
+        gap: 8px;
+        padding-bottom: 18px;
+    }
+
+    .menu-button {
+        font-size: 22px;
+        padding: 8px 22px;
+    }
+
+    .small-button {
+        font-size: 14px;
+        padding: 6px 14px;
     }
 }

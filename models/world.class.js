@@ -1,25 +1,68 @@
 class World extends WorldBase {
     /**
-     * Checks whether the player is throwing a bottle and creates
-     * a throwable object when all conditions are met.
+     * Checks whether the player can throw a bottle and creates one
+     * when the input, inventory, and cooldown conditions are met.
      *
      * @returns {void}
      */
     checkThrowObjects() {
-        if (this.keyboard.D && this.character.bottles > 0 && this.canThrow) {
-            let throwableObject = new ThrowableObject(this.character.x + 100, this.character.y + 100);
-            this.throwableObjects.push(throwableObject);
-            audioManager.playBottleThrowSound();
-
-            this.character.bottles -= 20;
-            this.bottleBar.setPercentage(this.character.bottles);
-
-            this.canThrow = false;
+        if (this.canCreateThrowableObject()) {
+            this.createThrowableObject();
         }
 
         if (!this.keyboard.D) {
             this.canThrow = true;
         }
+    }
+
+    /**
+     * Checks whether a new bottle may currently be thrown.
+     *
+     * @returns {boolean} True if all throwing conditions are met.
+     */
+    canCreateThrowableObject() {
+        return this.keyboard.D &&
+            this.character.bottles > 0 &&
+            this.canThrow &&
+            this.isBottleCooldownFinished();
+    }
+
+    /**
+     * Checks whether enough time has passed since the last bottle throw.
+     *
+     * @returns {boolean} True if the throwing cooldown has finished.
+     */
+    isBottleCooldownFinished() {
+        let timeSinceLastThrow = Date.now() - this.lastBottleThrowTime;
+        return timeSinceLastThrow >= this.bottleThrowCooldown;
+    }
+
+    /**
+     * Creates a new throwable bottle at the character's position.
+     *
+     * @returns {void}
+     */
+    createThrowableObject() {
+        let throwableObject = new ThrowableObject(
+            this.character.x + 100,
+            this.character.y + 100
+        );
+
+        this.throwableObjects.push(throwableObject);
+        this.handleBottleThrow();
+    }
+
+    /**
+     * Updates the sound, inventory, status bar, and throwing state.
+     *
+     * @returns {void}
+     */
+    handleBottleThrow() {
+        audioManager.playBottleThrowSound();
+        this.character.bottles -= 20;
+        this.bottleBar.setPercentage(this.character.bottles);
+        this.lastBottleThrowTime = Date.now();
+        this.canThrow = false;
     }
 
     /**

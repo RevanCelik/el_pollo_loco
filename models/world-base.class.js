@@ -12,6 +12,8 @@ class WorldBase {
     endbossBar = new StatusbarEndboss();
     throwableObjects = [];
     canThrow = true;
+    lastBottleThrowTime = 0;
+    bottleThrowCooldown = 1500;
     gameOverShown = false;
     winnerShown = false;
     gameOverStarted = false;
