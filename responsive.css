@@ -1,6 +1,7 @@
-/* Smartphone portrait mode */
+/* Touch devices in portrait mode */
 
-@media only screen and (max-width: 900px) and (orientation: portrait) {
+@media only screen and (max-width: 900px) and (orientation: portrait) and (hover: none) and (pointer: coarse) {
+
     .orientation-warning {
         display: flex;
     }
@@ -24,14 +25,6 @@
 
     .game-container {
         width: min(100vw, calc(100dvh * 1.5), 720px);
-    }
-
-    .mobile-controls:not(.hidden) {
-        display: flex;
-    }
-
-    .controls-info {
-        display: none;
     }
 
     .sound-controls {
@@ -80,10 +73,6 @@
         width: min(100vw, calc(100dvh * 1.5), 720px);
     }
 
-    .controls-info {
-        display: none;
-    }
-
     .impressum-page {
         padding: 16px 10px;
     }
@@ -129,8 +118,9 @@
 
 /* Touch devices and tablet emulation */
 
-@media (hover: none) and (pointer: coarse),
-(min-width: 901px) and (max-width: 1366px) and (orientation: landscape) {
+/* Touch devices */
+
+@media (hover: none) and (pointer: coarse) {
     .mobile-controls:not(.hidden) {
         display: flex;
     }
@@ -155,10 +145,6 @@
         width: min(100vw,
                 calc((100dvh - 50px) * 1.5),
                 720px);
-    }
-
-    .controls-info {
-        display: none;
     }
 
     .sound-controls {

@@ -88,15 +88,21 @@ class WorldBase {
     }
 
     /**
-     * Stops the active world loop and renderer.
+     * Stops the active world loop, renderer, character animations,
+     * keyboard input and continuous character sounds.
      *
      * @returns {void}
      */
     stop() {
+        if (!this.isRunning) {
+            return;
+        }
+
         clearInterval(this.gameInterval);
         this.gameInterval = null;
         this.isRunning = false;
 
+        this.resetKeyboard();
         this.character.stop();
 
         audioManager.stopCharacterSnoringSound();

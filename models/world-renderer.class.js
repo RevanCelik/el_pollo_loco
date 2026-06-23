@@ -45,7 +45,7 @@ class WorldRenderer {
     }
 
     /**
-     * Draws the background objects using the current camera position.
+     * Draws the background and cloud objects using the current camera position.
      *
      * @returns {void}
      */
@@ -54,6 +54,7 @@ class WorldRenderer {
 
         world.ctx.translate(world.camera_x, 0);
         this.addObjectToMap(world.level.backgroundObjects);
+        this.addObjectToMap(world.level.clouds);
     }
 
     /**
@@ -80,7 +81,7 @@ class WorldRenderer {
         let world = this.world;
 
         this.addToMap(world.character);
-        this.addObjectToMap(world.level.clouds);
+
         this.addObjectToMap(world.level.coins);
         this.addObjectToMap(world.level.bottles);
         this.addObjectToMap(world.level.enemies);
@@ -149,7 +150,7 @@ class WorldRenderer {
         }
 
         movableObject.draw(this.world.ctx);
-        
+
 
         if (movableObject.otherDirection) {
             this.flipImageBack(movableObject);

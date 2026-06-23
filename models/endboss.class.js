@@ -104,6 +104,9 @@ class Endboss extends MovableObject {
     /**
      * Starts the interval responsible for the endboss movement.
      *
+     * The movement speed depends on the current animation state
+     * and the remaining energy of the endboss.
+     *
      * @returns {void}
      */
     startMovementInterval() {
@@ -112,10 +115,103 @@ class Endboss extends MovableObject {
                 return;
             }
 
-            if (this.currentAnimation === 'walking') {
-                this.x -= 2;
-            }
+            this.handleMovement();
         }, 1000 / 60);
+    }
+
+    /**
+ * Moves the endboss according to its current animation state.
+ *
+ * During the walking animation, the endboss moves normally.
+ * During the attack animation, it charges toward the player.
+ *
+ * @returns {void}
+ */
+    handleMovement() {
+        if (this.currentAnimation === 'walking') {
+            this.moveTowardsPlayer(this.getWalkingSpeed());
+        }
+
+        if (this.currentAnimation === 'attack') {
+            this.moveTowardsPlayer(this.getAttackSpeed());
+        }
+    }
+
+    /**
+ * Moves the endboss horizontally toward the player.
+ *
+ * @param {number} speed - The horizontal movement speed.
+ * @returns {void}
+ */
+    moveTowardsPlayer(speed) {
+        let characterX = this.world.character.x;
+
+        if (characterX < this.x) {
+            this.moveLeftTowardsPlayer(speed);
+        } else {
+            this.moveRightTowardsPlayer(speed);
+        }
+    }
+
+    /**
+ * Moves the endboss left toward the player.
+ *
+ * @param {number} speed - The horizontal movement speed.
+ * @returns {void}
+ */
+    moveLeftTowardsPlayer(speed) {
+        this.x -= speed;
+        this.otherDirection = false;
+    }
+
+    /**
+     * Moves the endboss right toward the player.
+     *
+     * @param {number} speed - The horizontal movement speed.
+     * @returns {void}
+     */
+    moveRightTowardsPlayer(speed) {
+        this.x += speed;
+        this.otherDirection = true;
+    }
+
+    /**
+     * Returns the walking speed based on the remaining energy.
+     *
+     * The endboss becomes slightly faster after each successful hit.
+     *
+     * @returns {number} The current walking speed.
+     */
+    getWalkingSpeed() {
+        if (this.energy <= 20) {
+            return 2.6;
+        }
+
+        if (this.energy <= 60) {
+            return 2.3;
+        }
+
+        return 2;
+    }
+
+    /**
+     * Returns the attack speed based on the remaining energy.
+     *
+     * The attack remains faster than normal walking without allowing
+     * the endboss to catch the player immediately.
+     *
+     * @returns {number} The current attack speed.
+     */
+    getAttackSpeed() {
+        if (this.energy <= 20) {
+            return 4.2;
+        }
+
+        if (this.energy <= 60) {
+            return 3.6;
+        }
+
+        return 3;
     }
 
     /**
@@ -221,10 +317,28 @@ class Endboss extends MovableObject {
         } else if (this.currentAnimation === 'attack') {
             this.playAnimationOnce(this.IMAGES_ATTACK, 'walking');
         } else if (this.currentAnimation === 'hurt') {
-            this.playAnimationOnce(this.IMAGES_HURT, 'walking');
+            this.playAnimationOnce(
+                this.IMAGES_HURT,
+                this.getAnimationAfterHurt()
+            );
         } else if (this.currentAnimation === 'dead') {
             this.playDeadAnimation();
         }
+    }
+
+    /**
+ * Returns the animation that should follow the hurt animation.
+ *
+ * At 20 energy, the endboss immediately starts a counterattack.
+ *
+ * @returns {string} The next animation state.
+ */
+    getAnimationAfterHurt() {
+        if (this.energy <= 20) {
+            return 'attack';
+        }
+
+        return 'walking';
     }
 
     /**
@@ -279,6 +393,9 @@ class Endboss extends MovableObject {
 
     /**
      * Reduces the endboss energy after being hit by a bottle.
+     *
+     * Each bottle hit removes 40 energy points, so the endboss
+     * is defeated after three successful hits.
      *
      * @returns {void}
      */

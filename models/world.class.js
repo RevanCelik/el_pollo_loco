@@ -38,18 +38,37 @@ class World extends WorldBase {
     }
 
     /**
-     * Creates a new throwable bottle at the character's position.
+     * Creates a throwable bottle at the character's position
+     * and passes the character's current facing direction.
      *
      * @returns {void}
      */
     createThrowableObject() {
+        let bottleX = this.getThrowableObjectStartX();
         let throwableObject = new ThrowableObject(
-            this.character.x + 100,
-            this.character.y + 100
+            bottleX,
+            this.character.y + 100,
+            this.character.otherDirection
         );
 
         this.throwableObjects.push(throwableObject);
         this.handleBottleThrow();
+    }
+
+    /**
+ * Returns the horizontal starting position of a thrown bottle.
+ *
+ * The bottle starts on the left or right side of the character,
+ * depending on the direction the character is currently facing.
+ *
+ * @returns {number} The horizontal starting position.
+ */
+    getThrowableObjectStartX() {
+        if (this.character.otherDirection) {
+            return this.character.x + 20;
+        }
+
+        return this.character.x + 100;
     }
 
     /**
@@ -275,6 +294,9 @@ class World extends WorldBase {
     /**
      * Starts the winner sequence after the endboss has been defeated.
      *
+     * Prevents repeated execution, stops all active game loops,
+     * resets the keyboard state and starts the winner audio sequence.
+     *
      * @returns {void}
      */
     handleWinnerScreen() {
@@ -283,15 +305,28 @@ class World extends WorldBase {
         }
 
         this.winnerShown = true;
-        audioManager.stopCharacterSnoringSound();
-        audioManager.stopCharacterSnoringSound();
-        audioManager.stopFootstepLoop();
+        this.resetKeyboard();
+        this.stop();
         audioManager.playEndbossDefeatedSound();
 
         setTimeout(() => {
             audioManager.playWinnerSoundThenScreenMusic();
             this.showWinnerOverlay();
         }, 1000);
+    }
+
+    /**
+ * Resets all active keyboard inputs.
+ *
+ * This prevents previously pressed keys from remaining active
+ * after the game has ended.
+ *
+ * @returns {void}
+ */
+    resetKeyboard() {
+        Object.keys(this.keyboard).forEach(key => {
+            this.keyboard[key] = false;
+        });
     }
 
     /**
@@ -316,8 +351,6 @@ class World extends WorldBase {
         }
 
         this.gameOverStarted = true;
-        audioManager.stopCharacterSnoringSound();
-        audioManager.stopCharacterSnoringSound();
         audioManager.stopFootstepLoop();
         audioManager.stopGameMusic();
         audioManager.playGameOverSound();
