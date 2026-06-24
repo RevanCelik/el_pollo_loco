@@ -1,87 +1,11 @@
 /**
- * Represents the final boss enemy in the game.
+ * Represents the final boss and controls its movement,
+ * animations, attacks, and damage handling.
  *
- * @extends MovableObject
+ * @extends EndbossBase
  */
-class Endboss extends MovableObject {
-
-    height = 500;
-    width = 400;
-    y = -20;
-    energy = 100;
-
-    offset = {
-        top: 120,
-        left: 75,
-        right: 60,
-        bottom: 100
-    };
-
-    IMAGES_ALERT = [
-        'img/4_enemie_boss_chicken/2_alert/G5.png',
-        'img/4_enemie_boss_chicken/2_alert/G6.png',
-        'img/4_enemie_boss_chicken/2_alert/G7.png',
-        'img/4_enemie_boss_chicken/2_alert/G8.png',
-        'img/4_enemie_boss_chicken/2_alert/G9.png',
-        'img/4_enemie_boss_chicken/2_alert/G10.png',
-        'img/4_enemie_boss_chicken/2_alert/G11.png',
-        'img/4_enemie_boss_chicken/2_alert/G12.png'
-    ];
-
-    IMAGES_WALKING = [
-        'img/4_enemie_boss_chicken/1_walk/G1.png',
-        'img/4_enemie_boss_chicken/1_walk/G2.png',
-        'img/4_enemie_boss_chicken/1_walk/G3.png',
-        'img/4_enemie_boss_chicken/1_walk/G4.png'
-    ];
-
-    IMAGES_ATTACK = [
-        'img/4_enemie_boss_chicken/3_attack/G13.png',
-        'img/4_enemie_boss_chicken/3_attack/G14.png',
-        'img/4_enemie_boss_chicken/3_attack/G15.png',
-        'img/4_enemie_boss_chicken/3_attack/G16.png',
-        'img/4_enemie_boss_chicken/3_attack/G17.png',
-        'img/4_enemie_boss_chicken/3_attack/G18.png',
-        'img/4_enemie_boss_chicken/3_attack/G19.png',
-        'img/4_enemie_boss_chicken/3_attack/G20.png'
-    ];
-
-    IMAGES_HURT = [
-        'img/4_enemie_boss_chicken/4_hurt/G21.png',
-        'img/4_enemie_boss_chicken/4_hurt/G22.png',
-        'img/4_enemie_boss_chicken/4_hurt/G23.png'
-    ];
-
-    IMAGES_DEAD = [
-        'img/4_enemie_boss_chicken/5_dead/G24.png',
-        'img/4_enemie_boss_chicken/5_dead/G25.png',
-        'img/4_enemie_boss_chicken/5_dead/G26.png'
-    ];
-
-
-    world;
-
-    currentAnimation = 'waiting';
-    hasSeenPlayer = false;
-    isHurt = false;
-    isDeadAnimationPlayed = false;
-
-    deadAnimationCounter = 0;
-
-    /**
-     * Creates the endboss and loads all required animation images.
-     */
-    constructor() {
-        super().loadImage(this.IMAGES_ALERT[0]);
-
-        this.loadImages(this.IMAGES_ALERT);
-        this.loadImages(this.IMAGES_WALKING);
-        this.loadImages(this.IMAGES_ATTACK);
-        this.loadImages(this.IMAGES_HURT);
-        this.loadImages(this.IMAGES_DEAD);
-        this.x = 2200;
-    }
-
+class Endboss extends EndbossBase {
+    
     /**
      * Starts the endboss animation logic.
      *
@@ -197,21 +121,21 @@ class Endboss extends MovableObject {
     /**
      * Returns the attack speed based on the remaining energy.
      *
-     * The attack remains faster than normal walking without allowing
-     * the endboss to catch the player immediately.
+     * The endboss becomes faster after each successful bottle hit
+     * and covers more distance during the attack animation.
      *
      * @returns {number} The current attack speed.
      */
     getAttackSpeed() {
         if (this.energy <= 20) {
-            return 4.2;
+            return 6;
         }
 
         if (this.energy <= 60) {
-            return 3.6;
+            return 5.2;
         }
 
-        return 3;
+        return 4.4;
     }
 
     /**
@@ -394,8 +318,8 @@ class Endboss extends MovableObject {
     /**
      * Reduces the endboss energy after being hit by a bottle.
      *
-     * Each bottle hit removes 40 energy points, so the endboss
-     * is defeated after three successful hits.
+     * During the attack animation, the endboss receives only
+     * half of the normal bottle damage.
      *
      * @returns {void}
      */
@@ -404,13 +328,40 @@ class Endboss extends MovableObject {
             return;
         }
 
-        this.energy -= 40;
+        this.energy -= this.getBottleDamage();
+        this.handleBottleHitState();
+    }
 
+    /**
+ * Returns the bottle damage for the current boss state.
+ *
+ * The endboss receives reduced damage while attacking.
+ *
+ * @returns {number} The bottle damage.
+ */
+    getBottleDamage() {
+        if (this.currentAnimation === 'attack') {
+            return 20;
+        }
+
+        return 40;
+    }
+
+    /**
+ * Starts the appropriate animation after a bottle hit.
+ *
+ * The death animation starts when the endboss has no energy left.
+ * Otherwise, the hurt animation is played.
+ *
+ * @returns {void}
+ */
+    handleBottleHitState() {
         if (this.energy <= 0) {
             this.energy = 0;
             this.startDeadAnimation();
-        } else {
-            this.startHurtAnimation();
+            return;
         }
+
+        this.startHurtAnimation();
     }
 }

@@ -149,12 +149,54 @@ class WorldRenderer {
             this.flipImage(movableObject);
         }
 
-        movableObject.draw(this.world.ctx);
+        this.drawObjectWithStateEffect(movableObject);
 
 
         if (movableObject.otherDirection) {
             this.flipImageBack(movableObject);
         }
+    }
+
+    /**
+ * Draws an object with an optional visual state effect.
+ *
+ * @param {DrawableObject} movableObject - The object to draw.
+ * @returns {void}
+ */
+    drawObjectWithStateEffect(movableObject) {
+        if (this.isAttackingEndboss(movableObject)) {
+            this.drawAttackingEndboss(movableObject);
+            return;
+        }
+
+        movableObject.draw(this.world.ctx);
+    }
+
+    /**
+ * Checks whether the object is an attacking endboss.
+ *
+ * @param {DrawableObject} movableObject - The object to check.
+ * @returns {boolean} True if the endboss is attacking.
+ */
+    isAttackingEndboss(movableObject) {
+        return movableObject instanceof Endboss &&
+            movableObject.currentAnimation === 'attack';
+    }
+
+    /**
+ * Draws the attacking endboss with a visible warning effect.
+ *
+ * @param {DrawableObject} endboss - The attacking endboss.
+ * @returns {void}
+ */
+    drawAttackingEndboss(endboss) {
+        let ctx = this.world.ctx;
+
+        ctx.save();
+        ctx.globalAlpha = 0.75;
+        ctx.filter = 'sepia(1) saturate(2.5) hue-rotate(-35deg)';
+        endboss.draw(ctx);
+        ctx.restore();
     }
 
     /**

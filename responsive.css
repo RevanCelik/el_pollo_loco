@@ -1,7 +1,6 @@
 /* Touch devices in portrait mode */
 
-@media only screen and (max-width: 900px) and (orientation: portrait) and (hover: none) and (pointer: coarse) {
-
+@media (orientation: portrait) and (hover: none) and (pointer: coarse) {
     .orientation-warning {
         display: flex;
     }
@@ -23,18 +22,25 @@
         display: none;
     }
 
-    .controls-info {
-        display: none;
-    }
-
     .game-container {
         width: min(100vw, calc(100dvh * 1.5), 720px);
     }
 
+    #fullscreen {
+        position: relative;
+        width: fit-content;
+    }
+
     .sound-controls {
-        top: 6px;
-        right: 6px;
-        gap: 5px;
+        position: absolute;
+        top: 0;
+        left: calc(100% + 8px);
+        right: auto;
+
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
     }
 
     .sound-controls button:not(.fullscreen-button) {
@@ -128,6 +134,10 @@
     .mobile-controls:not(.hidden) {
         display: flex;
     }
+
+    .controls-info {
+        display: none;
+    }
 }
 
 /* Wide screens with limited height */
@@ -145,14 +155,21 @@
         width: min(100vw, calc(100dvh * 1.5), 720px);
     }
 
-    .controls-info {
-        display: none;
+    #fullscreen {
+        position: relative;
+        width: fit-content;
     }
 
     .sound-controls {
-        top: 6px;
-        right: 6px;
-        gap: 5px;
+        position: absolute;
+        top: 0;
+        left: calc(100% + 8px);
+        right: auto;
+
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
     }
 
     .sound-controls button:not(.fullscreen-button) {
@@ -240,4 +257,47 @@ body.fullscreen-active {
 #fullscreen:-webkit-full-screen .controls-info,
 #fullscreen.fullscreen-fallback .controls-info {
     display: none;
+}
+
+@media (hover: none) and (pointer: coarse) and (orientation: landscape) {
+    .mobile-controls:not(.hidden) {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: max(16px, env(safe-area-inset-bottom));
+        width: 100vw;
+
+        display: flex;
+        justify-content: space-between;
+
+        padding-left: max(20px, env(safe-area-inset-left));
+        padding-right: max(20px, env(safe-area-inset-right));
+        box-sizing: border-box;
+
+        z-index: 10000;
+        pointer-events: none;
+    }
+
+    .mobile-controls-left,
+    .mobile-controls-right {
+        pointer-events: auto;
+    }
+}
+
+/* Sound controls inside fullscreen mode */
+
+@media only screen and (orientation: landscape) {
+    #fullscreen:fullscreen .sound-controls {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        left: auto;
+
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 4px;
+
+        z-index: 9999;
+    }
 }

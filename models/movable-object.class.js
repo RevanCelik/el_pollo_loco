@@ -69,23 +69,25 @@ class MovableObject extends DrawableObject {
     }
 
     /**
-     * Reduces the object's energy if it is currently able to receive damage.
+     * Reduces the object's energy by the specified damage amount
+     * if the object is currently able to receive damage.
      *
+     * @param {number} [damage=20] - The amount of energy to remove.
      * @returns {boolean} True if the object was hit, otherwise false.
      */
-    hit() {
-        if (this.canBeHit()) {
-            this.energy -= 20;
-
-            if (this.energy < 0) {
-                this.energy = 0;
-            }
-
-            this.lastHit = new Date().getTime();
-            return true;
+    hit(damage = 20) {
+        if (!this.canBeHit()) {
+            return false;
         }
 
-        return false;
+        this.energy -= damage;
+
+        if (this.energy < 0) {
+            this.energy = 0;
+        }
+
+        this.lastHit = Date.now();
+        return true;
     }
 
     /**

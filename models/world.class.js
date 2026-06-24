@@ -113,7 +113,7 @@ class World extends WorldBase {
         }
 
         if (this.character.isColliding(enemy)) {
-            this.character.hit();
+            this.character.hit(this.getEnemyDamage(enemy));
             this.statusBar.setPercentage(this.character.energy);
 
             if (this.character.isDead()) {
@@ -122,6 +122,25 @@ class World extends WorldBase {
                 audioManager.playCharacterHurtSound(this.character.isDead());
             }
         }
+    }
+
+    /**
+ * Returns the damage caused by the colliding enemy.
+ *
+ * The endboss causes increased damage during its attack animation.
+ *
+ * @param {MovableObject} enemy - The colliding enemy.
+ * @returns {number} The amount of damage caused.
+ */
+    getEnemyDamage(enemy) {
+        if (
+            enemy instanceof Endboss &&
+            enemy.currentAnimation === 'attack'
+        ) {
+            return 40;
+        }
+
+        return 20;
     }
 
     /**
