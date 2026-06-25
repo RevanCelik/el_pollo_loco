@@ -80,6 +80,7 @@ class AudioManagerBase {
 
         this.winnerScreenMusic.loop = true;
         this.winnerScreenMusic.volume = 0.22;
+        this.applyVolumes();
     }
 
     /**
@@ -140,6 +141,11 @@ class AudioManagerBase {
     toggleSfx() {
         this.sfxMuted = !this.sfxMuted;
         this.saveAudioSettings();
+
+        if (this.sfxMuted) {
+            this.stopAllSfx();
+        }
+
         this.applyVolumes();
     }
 
@@ -177,6 +183,22 @@ class AudioManagerBase {
         this.getMusicTracks().forEach(music => {
             music.pause();
         });
+    }
+
+    /**
+ * Stops and resets all registered sound effects.
+ *
+ * @returns {void}
+ */
+    stopAllSfx() {
+        this.getSfxTracks().forEach(sound => {
+            sound.pause();
+            sound.currentTime = 0;
+        });
+
+        this.isCharacterSnoring = false;
+        this.isCharacterHurtSoundPlaying = false;
+        this.isGameOverSoundPlaying = false;
     }
 
     /**

@@ -12,6 +12,8 @@ class Character extends MovableObject {
     bottles = 0;
     deadAnimationPlayed = false;
     deadImageIndex = 0;
+    deadAnimationCounter = 0;
+    deadAnimationDelay = 2;
     lastActionTime = Date.now();
     longIdleDelay = 15000;
 
@@ -210,20 +212,35 @@ class Character extends MovableObject {
     }
 
     /**
-     * Advances the character's death animation by one image.
+     * Advances the character's death animation at a reduced speed.
      *
      * @returns {void}
      */
     playDeadAnimation() {
-        if (this.deadImageIndex < this.IMAGES_DEAD.length) {
-            let path = this.IMAGES_DEAD[this.deadImageIndex];
-            this.img = this.imageCache[path];
-            this.deadImageIndex++;
+        this.deadAnimationCounter++;
+
+        if (this.deadAnimationCounter < this.deadAnimationDelay) {
+            return;
         }
 
+        this.deadAnimationCounter = 0;
+        this.showNextDeadImage();
+    }
+
+    /**
+     * Displays the next image of the character's death animation.
+     *
+     * @returns {void}
+     */
+    showNextDeadImage() {
         if (this.deadImageIndex >= this.IMAGES_DEAD.length) {
             this.deadAnimationPlayed = true;
+            return;
         }
+
+        const path = this.IMAGES_DEAD[this.deadImageIndex];
+        this.img = this.imageCache[path];
+        this.deadImageIndex++;
     }
 
     /**

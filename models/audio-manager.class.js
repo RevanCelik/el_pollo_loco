@@ -58,7 +58,7 @@ class AudioManager extends AudioManagerBase {
      * @returns {void}
      */
     playGameOverSound() {
-        if (this.isGameOverSoundPlaying) {
+        if (this.sfxMuted || this.isGameOverSoundPlaying) {
             return;
         }
 
@@ -81,7 +81,7 @@ class AudioManager extends AudioManagerBase {
         this.characterSnoringSound.currentTime = 0;
         this.safePlay(this.characterSnoringSound);
     }
-    
+
     /**
      * Stops and resets the character-snoring sound.
      *
@@ -105,6 +105,7 @@ class AudioManager extends AudioManagerBase {
      */
     playCharacterHurtSound(characterIsDead) {
         if (
+            this.sfxMuted ||
             this.isCharacterHurtSoundPlaying ||
             this.isGameOverSoundPlaying ||
             characterIsDead
@@ -113,11 +114,12 @@ class AudioManager extends AudioManagerBase {
         }
 
         this.isCharacterHurtSoundPlaying = true;
-        this.playSfx(this.characterHurtSound);
 
         this.characterHurtSound.onended = () => {
             this.isCharacterHurtSoundPlaying = false;
         };
+
+        this.playSfx(this.characterHurtSound);
     }
 
     /**
@@ -177,12 +179,12 @@ class AudioManager extends AudioManagerBase {
     }
 
     /**
-     * Starts the looping footstep sound when it is currently paused.
+     * Starts the looping footstep sound when SFX are enabled.
      *
      * @returns {void}
      */
     playFootstepLoop() {
-        if (!this.footstepLoop.paused) {
+        if (this.sfxMuted || !this.footstepLoop.paused) {
             return;
         }
 
@@ -215,13 +217,12 @@ class AudioManager extends AudioManagerBase {
      * @returns {void}
      */
     playEndbossIntroSound() {
-        if (this.isEndbossIntroSoundPlayed) {
+        if (this.sfxMuted || this.isEndbossIntroSoundPlayed) {
             return;
         }
 
         this.isEndbossIntroSoundPlayed = true;
-        this.endbossIntroSound.currentTime = 0;
-        this.safePlay(this.endbossIntroSound);
+        this.playSfx(this.endbossIntroSound);
     }
 
     /**
@@ -240,8 +241,7 @@ class AudioManager extends AudioManagerBase {
      */
     playWinnerSound() {
         this.stopGameMusic();
-        this.winnerSound.currentTime = 0;
-        this.safePlay(this.winnerSound);
+        this.playSfx(this.winnerSound);
     }
 
     /**
@@ -255,14 +255,19 @@ class AudioManager extends AudioManagerBase {
         this.stopWinnerSequence();
 
         this.winnerSequenceActive = true;
-        this.winnerSound.currentTime = 0;
-        this.safePlay(this.winnerSound);
+
+        if (this.sfxMuted) {
+            this.playWinnerScreenMusic();
+            return;
+        }
 
         this.winnerSound.onended = () => {
             if (this.winnerSequenceActive) {
                 this.playWinnerScreenMusic();
             }
         };
+
+        this.playSfx(this.winnerSound);
     }
 
     /**

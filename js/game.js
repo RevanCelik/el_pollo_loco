@@ -246,19 +246,23 @@ window.addEventListener("keyup", (e) => {
  * @returns {void}
  */
 function bindTouchButton(buttonId, key) {
-    let button = document.getElementById(buttonId);
+    const button = document.getElementById(buttonId);
 
     if (!button) {
         return;
     }
 
-    button.addEventListener('touchstart', (e) => {
-        e.preventDefault();
+    button.addEventListener('touchstart', (event) => {
+        preventDefaultAction(event);
         keyboard[key] = true;
-    });
+    }, { passive: false });
 
-    button.addEventListener('touchend', (e) => {
-        e.preventDefault();
+    button.addEventListener('touchend', (event) => {
+        preventDefaultAction(event);
+        keyboard[key] = false;
+    }, { passive: false });
+
+    button.addEventListener('touchcancel', () => {
         keyboard[key] = false;
     });
 }
@@ -330,11 +334,13 @@ function disableMobileButtonContextMenu() {
 }
 
 /**
- * Prevents the browser's default behavior for the specified event.
+ * Prevents the browser's default behavior when the event is cancelable.
  *
- * @param {Event} event - The browser event whose default action should be prevented.
+ * @param {Event} event - The browser event.
  * @returns {void}
  */
 function preventDefaultAction(event) {
-    event.preventDefault();
+    if (event.cancelable) {
+        event.preventDefault();
+    }
 }
