@@ -51,7 +51,7 @@
     }
 
     .sound-controls button.fullscreen-button {
-        width: 28px;
+        width: 68px;
         min-width: 28px;
         height: 28px;
         padding: 0;
@@ -180,7 +180,7 @@
     }
 
     .sound-controls button.fullscreen-button {
-        width: 28px;
+        width: 68px;
         min-width: 28px;
         height: 28px;
         font-size: 14px;
